@@ -17,7 +17,7 @@ async def root(request: Request):
 
     return {"message": "Hello, OTUS"}
 
-@router.post('/login')
+@router.post('/user/login')
 async def login(request: Request, response: Response):
     login_body = await request.body()
 
@@ -57,13 +57,23 @@ async def register_user(request: Request, response: Response):
     user_sex = obj_user["sex"]   # 0 - female, 1 - male
     user_city = obj_user["city"]
     user_interests = obj_user["interests"]
+    login = obj_user["login"]
+    passw = obj_user["password"]
 
     print(f'login = {obj_user["login"]}, password = {obj_user["password"]}')
 
-    res_data = 'You are registered!'
-    res_login = postgre.check_password(obj_user["login"], obj_user["password"])
+    res_data = 'You are not registered!'
+    res_login = postgre.check_login(obj_user["login"])
     if res_login == 2:
-        postgre.add_user()
+        postgre.add_user(name=user_name,
+                         name_last=user_last,
+                         date_birth=date_birth,
+                         sex=user_sex,
+                         city=user_city,
+                         interests=user_interests,
+                         login=login,
+                         password=passw)
+        res_data = 'You are registered!'
     elif res_login == 1:
         res_data = 'You are not registered! The specified login already exists!'
     else:

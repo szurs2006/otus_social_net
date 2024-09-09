@@ -4,8 +4,8 @@ import hashlib
 
 
 class PostgreSupport:
-    def __init__(self, user="postgres",
-                 password="[e,f2006c]t;f]",
+    def __init__(self, user="serg",
+                 password="aiWgIDHKPdHr",
                  host="localhost",
                  port="5432",
                  database="OTUS",
@@ -36,10 +36,31 @@ class PostgreSupport:
             print("Ошибка соединения с PostgreSQL:", error)
             return False
 
+    def check_login(self, login):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            select_query = "SELECT login FROM logins WHERE login = %s"
+            cond_for_select = (login,)
+            try:
+                cursor.execute(select_query, cond_for_select)
+                result = cursor.fetchall()[0]
+                print(f'result = {result[0]}')
+                login_db = result[0]
+                if login_db is None:
+                    return 2
+                else:
+                    return 1
+            except (Exception, psycopg2.Error) as error:
+                print(f"login {login} не существует:", error)
+                return 2
+            finally:
+                cursor.close()
+                print('cursor closed')
+
     def check_password(self, login, pass_check):
         if self.connection is not None:
             cursor = self.connection.cursor()
-            select_query = """ SELECT password FROM OTUS.logins WHERE login = %s"""
+            select_query = "SELECT password FROM logins WHERE login = %s"
             cond_for_select = (login,)
             try:
                 cursor.execute(select_query, cond_for_select)
@@ -54,12 +75,29 @@ class PostgreSupport:
                 else:
                     print('Пароль неправильный!!!')
                     return 0
-            except (Exception, Error) as error:
+            except (Exception, psycopg2.Error) as error:
                 print(f"login {login} не существует:", error)
                 return 2
             finally:
                 cursor.close()
                 print('cursor closed')
+
+    def add_user(self, **user_data):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(
+                    'INSERT INTO users (name, name_last, date_birth, sex, city, interests) VALUES (%s, %s, %s, %s, %s, %s)',
+                    (user_data['name'], user_data['name_last'], user_data['date_birth'], user_data['sex'], user_data['city'], user_data['interests']))
+                id_of_new_row = cursor.fetchone()[0]
+                cursor.execute(
+                    'INSERT INTO OTUS.logins (id_user, login, password) VALUES (%s, %s, %s)',
+                    (id_of_new_row, user_data['login'], user_data['password']))
+                self.connection.commit()
+            except (Exception, psycopg2.Error) as error2:
+                print(f"Не удалось вставить {user_data['name']} {user_data['name_last']}: ", error2)
+            finally:
+                cursor.close()
 
     # def insert_new_value(self, id_uid, date_time, mnemonic, value, val_type, uom):
     #     if self.connection is not None:

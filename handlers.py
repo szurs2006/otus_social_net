@@ -65,15 +65,15 @@ async def register_user(request: Request, response: Response):
     res_data = 'You are not registered!'
     res_login = postgre.check_login(obj_user["login"])
     if res_login == 2:
-        postgre.add_user(name=user_name,
+        if postgre.add_user(name=user_name,
                          name_last=user_last,
                          date_birth=date_birth,
                          sex=user_sex,
                          city=user_city,
                          interests=user_interests,
                          login=login,
-                         password=passw)
-        res_data = 'You are registered!'
+                         password=passw):
+            res_data = 'You are registered!'
     elif res_login == 1:
         res_data = 'You are not registered! The specified login already exists!'
     else:

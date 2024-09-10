@@ -37,6 +37,7 @@ class PostgreSupport:
             return False
 
     def check_login(self, login):
+        # return 2
         if self.connection is not None:
             cursor = self.connection.cursor()
             select_query = "SELECT login FROM logins WHERE login = %s"
@@ -56,6 +57,8 @@ class PostgreSupport:
             finally:
                 cursor.close()
                 print('cursor closed')
+                self.connection.commit()
+
 
     def check_password(self, login, pass_check):
         if self.connection is not None:
@@ -87,18 +90,19 @@ class PostgreSupport:
             cursor = self.connection.cursor()
             try:
                 cursor.execute(
-                    'INSERT INTO users (name, name_last, date_birth, sex, city, interests) VALUES (%s, %s, %s, %s, %s, %s)',
+                    'INSERT INTO users (name, name_last, date_birth, sex, city, interests) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id',
                     (user_data['name'], user_data['name_last'], user_data['date_birth'], user_data['sex'], user_data['city'], user_data['interests']))
                 id_of_new_row = cursor.fetchone()[0]
                 cursor.execute(
-                    'INSERT INTO OTUS.logins (id_user, login, password) VALUES (%s, %s, %s)',
+                    'INSERT INTO logins (id_user, login, password) VALUES (%s, %s, %s)',
                     (id_of_new_row, user_data['login'], user_data['password']))
                 self.connection.commit()
+                return True
             except (Exception, psycopg2.Error) as error2:
                 print(f"Не удалось вставить {user_data['name']} {user_data['name_last']}: ", error2)
             finally:
                 cursor.close()
-
+            return False
     # def insert_new_value(self, id_uid, date_time, mnemonic, value, val_type, uom):
     #     if self.connection is not None:
     #         cursor = self.connection.cursor()

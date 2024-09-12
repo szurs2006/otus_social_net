@@ -93,9 +93,10 @@ class PostgreSupport:
                     'INSERT INTO users (name, name_last, date_birth, sex, city, interests) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id',
                     (user_data['name'], user_data['name_last'], user_data['date_birth'], user_data['sex'], user_data['city'], user_data['interests']))
                 id_of_new_row = cursor.fetchone()[0]
+                pass_hash = hashlib.md5(user_data['password'].encode("utf-8")).hexdigest()
                 cursor.execute(
                     'INSERT INTO logins (id_user, login, password) VALUES (%s, %s, %s)',
-                    (id_of_new_row, user_data['login'], user_data['password']))
+                    (id_of_new_row, user_data['login'], pass_hash))
                 self.connection.commit()
                 return True
             except (Exception, psycopg2.Error) as error2:

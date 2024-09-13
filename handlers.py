@@ -93,7 +93,7 @@ async def register_user(request: Request, response: Response):
     # print(res_data)
     return Response(content=json.dumps(res_obj), media_type="application/json")
 
-@router.get("/user/{id_user}")
+@router.get("/user/get/{id_user}")
 def get_user_by_id(id_user: str, request: Request, response: Response):
 
     user_dict = postgre.get_user_data(id_user)

@@ -63,24 +63,27 @@ class PostgreSupport:
     def check_password(self, login, pass_check):
         if self.connection is not None:
             cursor = self.connection.cursor()
-            select_query = "SELECT password FROM logins WHERE login = %s"
+            select_query = "SELECT password, id_user FROM logins WHERE login = %s"
             cond_for_select = (login,)
             try:
                 cursor.execute(select_query, cond_for_select)
                 result = cursor.fetchall()[0]
-                print(f'result = {result[0]}')
                 pass_db = result[0]
+                id_user = result[1]
+                print(f'pass_db = {pass_db}')
+                print(f'id_user = {id_user}')
+
                 pass_hash = hashlib.md5(pass_check.encode("utf-8")).hexdigest()
 
                 if pass_db == pass_hash:
                     print('Пароль правильный')
-                    return 1
+                    return id_user
                 else:
                     print('Пароль неправильный!!!')
                     return 0
             except (Exception, psycopg2.Error) as error:
                 print(f"login {login} не существует:", error)
-                return 2
+                return 0
             finally:
                 cursor.close()
                 print('cursor closed')
@@ -98,12 +101,12 @@ class PostgreSupport:
                     'INSERT INTO logins (id_user, login, password) VALUES (%s, %s, %s)',
                     (id_of_new_row, user_data['login'], pass_hash))
                 self.connection.commit()
-                return True
+                return id_of_new_row
             except (Exception, psycopg2.Error) as error2:
                 print(f"Не удалось вставить {user_data['name']} {user_data['name_last']}: ", error2)
             finally:
                 cursor.close()
-            return False
+            return 0
     # def insert_new_value(self, id_uid, date_time, mnemonic, value, val_type, uom):
     #     if self.connection is not None:
     #         cursor = self.connection.cursor()
@@ -123,3 +126,29 @@ class PostgreSupport:
     #                 f'Не удалось записать {mnemonic} со значением {value} типа {val_type} и uom = {uom}, ошибка {err}')
     #         finally:
     #             cursor.close()
+
+    def get_user_data(self, id_user):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            select_query = "SELECT * FROM users WHERE id = %s"
+            cond_for_select = (id_user,)
+            try:
+                cursor.execute(select_query, cond_for_select)
+                user_data = cursor.fetchall()[0]
+                print(f'user_data = {user_data}')
+                user_data_obj = {
+                    'id_user': user_data[0],
+                    'name': user_data[1],
+                    'name_last': user_data[2],
+                    'date_birth': user_data[3].strftime("%d.%m.%Y"),
+                    'sex': user_data[4],
+                    'city': user_data[5],
+                    'interests': user_data[6],
+                }
+                return user_data_obj
+            except (Exception, psycopg2.Error) as error:
+                print(f"id_user {id_user} не существует:", error)
+                return {}
+            finally:
+                cursor.close()
+                print('cursor closed')

@@ -28,21 +28,21 @@ async def login(request: Request, response: Response):
 
     res_login = postgre.check_password(obj_login["login"], obj_login["password"])
 
-    res_data = 'You are not logined!'
+    res_data = 'You are not logined! Login or password is wrong!'
 
-    if res_login == 2:
-        res_data = "You are not logined! Login or password is wrong!"
-    elif res_login == 0:
-        res_data = "Login is not exist! Maybe you need to register!"
-    elif res_login == 1:
+    if res_login > 0:
         res_data = 'You are logined!!'
 
     # print(request.headers)
-    response.headers['content-type'] = 'text/html'
+    response.headers['content-type'] = 'application/json'
     print(response.headers)
 
+    res_obj = {
+        'id_user': res_login,
+        'res_text': res_data
+    }
     # print(res_data)
-    return Response(content=res_data, media_type="text/html")
+    return Response(content=json.dumps(res_obj), media_type="application/json")
 
 @router.post('/user/register')
 async def register_user(request: Request, response: Response):
@@ -63,25 +63,51 @@ async def register_user(request: Request, response: Response):
     print(f'login = {obj_user["login"]}, password = {obj_user["password"]}')
 
     res_data = 'You are not registered!'
+    id_user = 0
     res_login = postgre.check_login(obj_user["login"])
     if res_login == 2:
-        if postgre.add_user(name=user_name,
+        id_user = postgre.add_user(name=user_name,
                          name_last=user_last,
                          date_birth=date_birth,
                          sex=user_sex,
                          city=user_city,
                          interests=user_interests,
                          login=login,
-                         password=passw):
+                         password=passw)
+        if id_user > 0:
             res_data = 'You are registered!'
     elif res_login == 1:
         res_data = 'You are not registered! The specified login already exists!'
     else:
         res_data = 'The specified login already exists! '
+    res_obj = {
+        'id_user': id_user,
+        'res_text': res_data
+    }
 
     # print(request.headers)
-    response.headers['content-type'] = 'text/html'
+    response.headers['content-type'] = 'application/json'  # 'text/html'
+    print(response.headers)
+
+
+    # print(res_data)
+    return Response(content=json.dumps(res_obj), media_type="application/json")
+
+@router.get("/user/{id_user}")
+def get_user_by_id(id_user: str, request: Request, response: Response):
+
+    user_dict = postgre.get_user_data(id_user)
+    res_obj = {
+        'id_user': id_user,
+        'res_text': "Cannot find user!"
+    }
+    if not user_dict:
+        user_dict = res_obj
+
+    # client_host = request.client.host
+
+    response.headers['content-type'] = 'application/json'  # 'text/html'
     print(response.headers)
 
     # print(res_data)
-    return Response(content=res_data, media_type="text/html")
+    return Response(content=json.dumps(user_dict), media_type="application/json")

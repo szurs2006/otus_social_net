@@ -132,3 +132,32 @@ class PostgreSupport:
             finally:
                 cursor.close()
                 print('cursor closed')
+
+    def search_users(self, params):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            select_query = "SELECT * FROM public.users WHERE name LIKE %s AND name_last LIKE %s ORDER BY id"
+            cond_for_select = (params['name'], params['last_name'])
+            try:
+                cursor.execute(select_query, cond_for_select)
+                users_data = cursor.fetchall()
+                print(f'users_data = {users_data}')
+                return users_data
+                # user_data = cursor.fetchall()[0]
+                # print(f'user_data = {user_data}')
+                # user_data_obj = {
+                #     'id_user': user_data[0],
+                #     'name': user_data[1],
+                #     'name_last': user_data[2],
+                #     'date_birth': user_data[3].strftime("%d.%m.%Y"),
+                #     'sex': user_data[4],
+                #     'city': user_data[5],
+                #     'interests': user_data[6],
+                # }
+                # return user_data_obj
+            except (Exception, psycopg2.Error) as error:
+                print(f"id_user {id_user} не существует:", error)
+                return {}
+            finally:
+                cursor.close()
+                print('cursor closed')

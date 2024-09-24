@@ -2,7 +2,6 @@ from fastapi import APIRouter, Request, Response
 import json
 from postgre_support import PostgreSupport
 
-
 router = APIRouter()
 
 postgre = PostgreSupport()
@@ -16,6 +15,7 @@ async def root(request: Request):
     print(f'req_body = {req_body}')
 
     return {"message": "Hello, OTUS"}
+
 
 @router.post('/user/login')
 async def login(request: Request, response: Response):
@@ -44,6 +44,7 @@ async def login(request: Request, response: Response):
     # print(res_data)
     return Response(content=json.dumps(res_obj), media_type="application/json")
 
+
 @router.post('/user/register')
 async def register_user(request: Request, response: Response):
     login_body = await request.body()
@@ -54,7 +55,7 @@ async def register_user(request: Request, response: Response):
     user_name = obj_user["name"]
     user_last = obj_user["name_last"]
     date_birth = obj_user["date_birth"]
-    user_sex = obj_user["sex"]   # 0 - female, 1 - male
+    user_sex = obj_user["sex"]  # 0 - female, 1 - male
     user_city = obj_user["city"]
     user_interests = obj_user["interests"]
     login = obj_user["login"]
@@ -67,13 +68,13 @@ async def register_user(request: Request, response: Response):
     res_login = postgre.check_login(obj_user["login"])
     if res_login == 2:
         id_user = postgre.add_user(name=user_name,
-                         name_last=user_last,
-                         date_birth=date_birth,
-                         sex=user_sex,
-                         city=user_city,
-                         interests=user_interests,
-                         login=login,
-                         password=passw)
+                                   name_last=user_last,
+                                   date_birth=date_birth,
+                                   sex=user_sex,
+                                   city=user_city,
+                                   interests=user_interests,
+                                   login=login,
+                                   password=passw)
         if id_user > 0:
             res_data = 'You are registered!'
     elif res_login == 1:
@@ -89,13 +90,12 @@ async def register_user(request: Request, response: Response):
     response.headers['content-type'] = 'application/json'  # 'text/html'
     print(response.headers)
 
-
     # print(res_data)
     return Response(content=json.dumps(res_obj), media_type="application/json")
 
+
 @router.get("/user/get/{id_user}")
 def get_user_by_id(id_user: str, request: Request, response: Response):
-
     user_dict = postgre.get_user_data(id_user)
     res_obj = {
         'id_user': id_user,
@@ -111,3 +111,26 @@ def get_user_by_id(id_user: str, request: Request, response: Response):
 
     # print(res_data)
     return Response(content=json.dumps(user_dict), media_type="application/json")
+
+
+@router.get("/user/search/")
+def search_user(name: str, last_name: str, request: Request, response: Response):
+    params = request.query_params
+
+    users_result = postgre.search_users(params)
+
+    # user_dict = postgre.get_user_data(id_user)
+    # res_obj = {
+    #     'id_user': id_user,
+    #     'res_text': "Cannot find user!"
+    # }
+    # if not user_dict:
+    #     user_dict = res_obj
+
+    # client_host = request.client.host
+
+    response.headers['content-type'] = 'application/json'  # 'text/html'
+    print(response.headers)
+
+    # print(res_data)
+    return Response(content=json.dumps(users_result, default=str), media_type="application/json")

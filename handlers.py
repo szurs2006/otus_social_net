@@ -134,3 +134,43 @@ def search_user(name: str, last_name: str, request: Request, response: Response)
 
     # print(res_data)
     return Response(content=json.dumps(users_result, default=str), media_type="application/json")
+
+
+@router.post('/friend/add')
+async def friend_add(request: Request, response: Response):
+    body = await request.body()
+
+    # print(f'login_body = {login_body}')0
+    obj_tofriend = json.loads(body)
+
+    id_user = obj_tofriend["id_user"]
+    id_friend = obj_tofriend["id_friend"]
+
+    print(f'user_id = {obj_tofriend["id_user"]}, friend_id = {obj_tofriend["id_friend"]}')
+
+    if postgre.add_friend(id_user=id_user,
+                          id_friend=id_friend):
+        res_data = 'You added new friend!'
+    else:
+        res_data = 'You cannot add new friend! May be you have this friend already!'
+
+    response.headers['content-type'] = 'application/json'  # 'text/html'
+    # print(response.headers)
+
+    # print(res_data)
+    return Response(res_data)
+
+
+@router.get("/post/feed/")
+def post_feed(id_user: str, offset: str, limit: str, request: Request, response: Response):
+    params = request.query_params
+
+    posts_result = postgre.feed_friends_posts(params)
+
+    post_friends = posts_result[int(params['offset']):]
+
+    response.headers['content-type'] = 'application/json'  # 'text/html'
+    print(response.headers)
+
+    # print(res_data)
+    return Response(content=json.dumps(post_friends, default=str), media_type="application/json")

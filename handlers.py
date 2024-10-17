@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Request, Response
 import json
-from postgre_support import PostgreSupport
+from common import postgre
+from common import cache
+# from cache_support import get_posts_friends_from_cache
+
+# from postgre_support import PostgreSupport
+# from cache_support import get_posts_friends_from_cache
 
 router = APIRouter()
 
-postgre = PostgreSupport()
-postgre.connect_db()
+# postgre = PostgreSupport()
+# postgre.connect_db()
 
 
 @router.get("/")
@@ -151,6 +156,7 @@ async def friend_add(request: Request, response: Response):
     if postgre.add_friend(id_user=id_user,
                           id_friend=id_friend):
         res_data = 'You added new friend!'
+        # invalidate_cache(id_user=id_user)
     else:
         res_data = 'You cannot add new friend! May be you have this friend already!'
 
@@ -164,10 +170,19 @@ async def friend_add(request: Request, response: Response):
 @router.get("/post/feed/")
 def post_feed(id_user: str, offset: str, limit: str, request: Request, response: Response):
     params = request.query_params
+    post_result = ''
+    cache_value = cache.get_posts_friends_from_cache(params)
+    if cache_value is not None:
+        print('Load from Cache')
+        post_result = json.loads(cache_value)
+    else:
+        post_result = postgre.feed_friends_posts(params)
+        cache.set_posts_friends_to_cache(params, post_result)
 
-    posts_result = postgre.feed_friends_posts(params)
+    # post_result = cache.get_posts_friends_from_cache(params)
+    # posts_result = postgre.feed_friends_posts(params)
 
-    post_friends = posts_result[int(params['offset']):]
+    post_friends = post_result[int(params['offset']):]
 
     response.headers['content-type'] = 'application/json'  # 'text/html'
     print(response.headers)

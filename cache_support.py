@@ -38,20 +38,9 @@ class CacheSupport:
         if cache_value is not None:
             print('Load from Cache')
             return cache_value
-        # result = postgre.feed_friends_posts(params)
-        # print('Load from Database')
-        # self.connection.set(params['id_user'], json.dumps(result, default=str))
-        #redis_client.close()
         return result
 
-    def set_posts_friends_to_cache(self, params, obj_posts):
-        # cache_value = self.connection.get(params['id_user'])
-        # if cache_value is not None:
-        #     print('Load from Cache')
-        #     return json.loads(cache_value)
-        #
-        # result = postgre.feed_friends_posts(params)
-        # print('Load from Database')
+    def set_posts_friends_to_cache(self, params: dict, obj_posts: object):
         self.connection.set(params['id_user'], json.dumps(obj_posts, default=str))
-        # redis_client.close()
-        # return result
+
+

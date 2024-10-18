@@ -2,15 +2,15 @@ from fastapi import APIRouter, Request, Response
 import json
 from common import postgre
 from common import cache
-# from cache_support import get_posts_friends_from_cache
 
-# from postgre_support import PostgreSupport
-# from cache_support import get_posts_friends_from_cache
+
+def invalidate_cache(params: dict):
+    post_result = postgre.feed_friends_posts(params)
+    cache.set_posts_friends_to_cache(params, post_result)
+    print('Cache invalidated')
+
 
 router = APIRouter()
-
-# postgre = PostgreSupport()
-# postgre.connect_db()
 
 
 @router.get("/")
@@ -124,16 +124,6 @@ def search_user(name: str, last_name: str, request: Request, response: Response)
 
     users_result = postgre.search_users(params)
 
-    # user_dict = postgre.get_user_data(id_user)
-    # res_obj = {
-    #     'id_user': id_user,
-    #     'res_text': "Cannot find user!"
-    # }
-    # if not user_dict:
-    #     user_dict = res_obj
-
-    # client_host = request.client.host
-
     response.headers['content-type'] = 'application/json'  # 'text/html'
     print(response.headers)
 
@@ -156,7 +146,7 @@ async def friend_add(request: Request, response: Response):
     if postgre.add_friend(id_user=id_user,
                           id_friend=id_friend):
         res_data = 'You added new friend!'
-        # invalidate_cache(id_user=id_user)
+        invalidate_cache(obj_tofriend)
     else:
         res_data = 'You cannot add new friend! May be you have this friend already!'
 
@@ -164,6 +154,33 @@ async def friend_add(request: Request, response: Response):
     # print(response.headers)
 
     # print(res_data)
+    return Response(res_data)
+
+
+@router.post('/post/create')
+async def create_post(request: Request, response: Response):
+    body = await request.body()
+
+    obj_post = json.loads(body)
+
+    id_user = obj_post["id_user"]
+    new_post = obj_post["new_post"]
+
+    print(f'id_user = {obj_post["id_user"]}, new_post = {obj_post["new_post"]}')
+
+    if postgre.add_post(id_user=id_user,
+                        new_post=new_post):
+        res_data = f'You added new post for user with id = {id_user}!'
+
+        users_invalidated = postgre.get_users_by_friend(id_user)
+        for user_inv in users_invalidated:
+            users_obj = {'id_user': user_inv}
+            invalidate_cache(users_obj)
+    else:
+        res_data = 'You cannot add new post!!'
+
+    response.headers['content-type'] = 'application/json'  # 'text/html'
+
     return Response(res_data)
 
 
@@ -176,11 +193,9 @@ def post_feed(id_user: str, offset: str, limit: str, request: Request, response:
         print('Load from Cache')
         post_result = json.loads(cache_value)
     else:
-        post_result = postgre.feed_friends_posts(params)
-        cache.set_posts_friends_to_cache(params, post_result)
-
-    # post_result = cache.get_posts_friends_from_cache(params)
-    # posts_result = postgre.feed_friends_posts(params)
+        invalidate_cache(params)
+        # post_result = postgre.feed_friends_posts(params)
+        # cache.set_posts_friends_to_cache(params, post_result)
 
     post_friends = post_result[int(params['offset']):]
 

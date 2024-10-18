@@ -2,6 +2,16 @@ import psycopg2
 import hashlib
 
 
+def get_first(seq):
+    if isinstance(seq, (tuple, list)):
+        return get_first(seq[0])
+    return seq
+
+
+def get_zero_list(seq):
+    return [get_first(i) for i in seq]
+
+
 class PostgreSupport:
     def __init__(self, user="serg",
                  password="aiWgIDHKPdHr",
@@ -179,21 +189,64 @@ class PostgreSupport:
                 cursor.close()
             return False
 
-    def feed_friends_posts(self, params):
+    def feed_friends_posts(self, params: dict):
         if self.connection is not None:
             cursor = self.connection.cursor()
+            limit = 100
+            if 'limit' in params:
+                limit = params['limit']
             select_query = """SELECT up.*
                             FROM users_posts up, users_friends uf 
                             WHERE uf.id_user =  %s
                             AND uf.id_friend = up.id_user  
                             ORDER BY up.id_user, up.post_created LIMIT %s"""
             # cond_for_select = (params['id_user'], params['offset'], params['limit'])
-            cond_for_select = (params['id_user'], params['limit'])
+            cond_for_select = (params['id_user'], limit)
             try:
                 cursor.execute(select_query, cond_for_select)
                 users_data = cursor.fetchall()
                 print(f'users_data = {users_data}')
                 return users_data
+
+            except (Exception, psycopg2.Error) as error:
+                print(f"Error:", error)
+                return {}
+            finally:
+                cursor.close()
+                print('cursor closed')
+
+    def add_post(self, **user_data):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(
+                    'INSERT INTO users_posts (id_user, post) VALUES (%s, %s)',
+                    (user_data['id_user'], user_data['new_post']))
+                self.connection.commit()
+                return True
+            except (Exception, psycopg2.Error) as error2:
+                print(f"Не удалось вставить {user_data['id_user']} {user_data['new_post']}: ", error2)
+                self.connection.rollback()
+            finally:
+                cursor.close()
+            return False
+
+    def get_users_by_friend(self, id_friend):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            select_query = """SELECT id_user 
+                            FROM users_friends uf 
+                            WHERE id_friend =  %s  
+                            """
+            # cond_for_select = (params['id_user'], params['offset'], params['limit'])
+            cond_for_select = (id_friend,)
+            try:
+                cursor.execute(select_query, cond_for_select)
+                users_data = cursor.fetchall()
+                print(f'users_data = {users_data}')
+                if users_data is not None:
+                    users_list = get_zero_list(list(users_data))
+                    return users_list
 
             except (Exception, psycopg2.Error) as error:
                 print(f"Error:", error)

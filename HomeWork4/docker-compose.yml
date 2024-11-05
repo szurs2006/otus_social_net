@@ -1,0 +1,38 @@
+services:                           
+  postgres_db:                      
+    image: postgres:16.4          
+    restart: always                 
+    environment:                     
+     - POSTGRES_USER=serg
+     - POSTGRES_PASSWORD=aiWgIDHKPdHr
+     - POSTGRES_DB=OTUS
+     - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:                          
+      - '5434:5432'
+    volumes:                        
+      - db-vol:/var/lib/postgresql/data
+  psqlclient:
+    image: bledig/alpine-psqlclient:3 
+  script_fill_db:                            
+    build: ./Dockerfile_test/.
+  redis_db:
+    image: redis:latest
+    restart: always
+    environment:         
+     - REDIS_PORT=49153            
+     - REDIS_USER=default
+     - REDIS_PASSWORD=redispw
+    ports:
+     - '49153:6379'
+  socialnet:
+    image: socialnet:latest 
+    depends_on:
+      postgres_db:
+        condition: service_started
+      redis_db:
+        condition: service_started	
+    restart: always
+    ports: 
+     - '8075:8070'           
+volumes:                           
+  db-vol:                           

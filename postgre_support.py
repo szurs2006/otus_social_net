@@ -15,16 +15,23 @@ def get_zero_list(seq):
 class PostgreSupport:
     def __init__(self, user="serg",
                  password="aiWgIDHKPdHr",
-                 host="localhost",
+                 host="postgres_db",
                  port="5432",
                  database="OTUS",
                  ):
+#     def __init__(self, user="serg",
+#                  password="aiWgIDHKPdHr",
+#                  host="localhost",
+#                  port="5434",
+#                  database="OTUS",
+#                  ):
         self.connection = None
         self.user = user
         self.password = password
         self.host = host
         self.port = port
         self.database = database
+        print(f'Postgres host = {self.host}, port = {self.port}')
 
     def __del__(self):
         if self.connection:

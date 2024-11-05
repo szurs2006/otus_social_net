@@ -5,14 +5,20 @@ import json
 class CacheSupport:
     def __init__(self, user="default",
                  password="redispw",
-                 host="localhost",
-                 port="49153"
+                 host="redis_db",
+                 port="6379"
                  ):
+        # def __init__(self, user="default",
+        #              password="redispw",
+        #              host="localhost",
+        #              port="49153"
+        #              ):
         self.connection = None
         self.user = user
         self.password = password
         self.host = host
         self.port = port
+        print(f'Redis host = {self.host}, port = {self.port}')
 
     def __del__(self):
         if self.connection:
@@ -25,7 +31,8 @@ class CacheSupport:
                                           port=self.port,
                                           username=self.user,
                                           password=self.password,
-                                          decode_responses=True)
+                                          decode_responses=False)
+            self.connection.flushall()
             print("Соединение с Redis открыто")
             return True
         except Exception as error:
@@ -34,13 +41,10 @@ class CacheSupport:
 
     def get_posts_friends_from_cache(self, params):
         cache_value = self.connection.get(params['id_user'])
-        result = {}
         if cache_value is not None:
             print('Load from Cache')
             return cache_value
-        return result
+        return cache_value
 
     def set_posts_friends_to_cache(self, params: dict, obj_posts: object):
         self.connection.set(params['id_user'], json.dumps(obj_posts, default=str))
-
-

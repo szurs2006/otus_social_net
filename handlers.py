@@ -8,6 +8,7 @@ def invalidate_cache(params: dict):
     post_result = postgre.feed_friends_posts(params)
     cache.set_posts_friends_to_cache(params, post_result)
     print('Cache invalidated')
+    return post_result
 
 
 router = APIRouter()
@@ -190,10 +191,14 @@ def post_feed(id_user: str, offset: str, limit: str, request: Request, response:
     post_result = ''
     cache_value = cache.get_posts_friends_from_cache(params)
     if cache_value is not None:
-        print('Load from Cache')
-        post_result = json.loads(cache_value)
+        print(f'Load from Cache - {cache_value}')
+        try:
+            post_result = json.loads(cache_value)
+        except Exception as error:
+            print(f'No data')
+            post_result = {}
     else:
-        invalidate_cache(params)
+        post_result = invalidate_cache(params)
         # post_result = postgre.feed_friends_posts(params)
         # cache.set_posts_friends_to_cache(params, post_result)
 

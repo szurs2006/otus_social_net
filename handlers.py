@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Request, Response
 import json
 from common import postgre
+from common import postgre_repl1
 from common import cache
 
 
 def invalidate_cache(params: dict):
-    post_result = postgre.feed_friends_posts(params)
+    post_result = postgre_repl1.feed_friends_posts(params)
     cache.set_posts_friends_to_cache(params, post_result)
     print('Cache invalidated')
     return post_result
@@ -32,7 +33,7 @@ async def login(request: Request, response: Response):
 
     print(f'login = {obj_login["login"]}, password = {obj_login["password"]}')
 
-    res_login = postgre.check_password(obj_login["login"], obj_login["password"])
+    res_login = postgre_repl1.check_password(obj_login["login"], obj_login["password"])
 
     res_data = 'You are not logined! Login or password is wrong!'
 
@@ -71,7 +72,7 @@ async def register_user(request: Request, response: Response):
 
     res_data = 'You are not registered!'
     id_user = 0
-    res_login = postgre.check_login(obj_user["login"])
+    res_login = postgre_repl1.check_login(obj_user["login"])
     if res_login == 2:
         id_user = postgre.add_user(name=user_name,
                                    name_last=user_last,
@@ -102,7 +103,7 @@ async def register_user(request: Request, response: Response):
 
 @router.get("/user/get/{id_user}")
 def get_user_by_id(id_user: str, request: Request, response: Response):
-    user_dict = postgre.get_user_data(id_user)
+    user_dict = postgre_repl1.get_user_data(id_user)
     res_obj = {
         'id_user': id_user,
         'res_text': "Cannot find user!"
@@ -123,7 +124,7 @@ def get_user_by_id(id_user: str, request: Request, response: Response):
 def search_user(name: str, last_name: str, request: Request, response: Response):
     params = request.query_params
 
-    users_result = postgre.search_users(params)
+    users_result = postgre_repl1.search_users(params)
 
     response.headers['content-type'] = 'application/json'  # 'text/html'
     print(response.headers)

@@ -3,16 +3,16 @@ import json
 
 
 class CacheSupport:
+    # def __init__(self, user="default",
+    #              password="redispw",
+    #              host="redis_db",
+    #              port="6379"
+    #              ):
     def __init__(self, user="default",
-                 password="redispw",
-                 host="redis_db",
-                 port="6379"
-                 ):
-        # def __init__(self, user="default",
-        #              password="redispw",
-        #              host="localhost",
-        #              port="49153"
-        #              ):
+                     password="redispw",
+                     host="localhost",
+                     port="49153"
+                     ):
         self.connection = None
         self.user = user
         self.password = password

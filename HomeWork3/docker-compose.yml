@@ -1,0 +1,87 @@
+version: '3.9'
+services:
+  pgmaster:
+    container_name: "pgmaster"
+    image: "postgres"
+    networks:
+      - pgnet
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./volumes/pgmaster:/var/lib/postgresql/data
+      - ./00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
+    environment: 
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+    command: |  
+      postgres 
+        -c wal_level=replica 
+        -c max_wal_senders=10 
+        -c max_replication_slots=10
+        -c hot_standby=on
+        -c hot_standby_feedback=on
+        -c synchronous_commit=on
+        -c synchronous_standby_names="ANY 1 (pgslave, pgslaveasync)"
+
+  pgslave:
+    container_name: "pgslave"
+    image: "postgres"
+
+    networks:
+      - pgnet
+    ports:
+      - "54322:5432"
+    volumes:
+      - ./volumes/pgslave:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+    command: |  # the first command
+      bash -c "
+      until pg_basebackup -U replicator -P --pgdata=/var/lib/postgresql/data -R --host=pgmaster --port=5432 -v --wal-method=stream
+      do
+      echo 'Waiting for pgmaster to connect...'
+      sleep 1s
+      done
+      echo 'pg_basebackup completed'
+      "
+
+    # command: |  # the second command
+    #   postgres 
+    #     -c primary_conninfo='host=pgmaster port=5432 user=replicator password=pass application_name=pgslave' 
+
+    depends_on:
+      - pgmaster
+
+  pgslaveasync:
+    container_name: "pgslaveasync"
+    image: "postgres"
+    privileged: true
+    networks:
+      - pgnet
+    ports:
+      - "54323:5432"
+    volumes:
+      - ./volumes/pgslaveasync:/var/lib/postgresql/data
+    environment: &AUTH
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+    command: |  # the first command
+      bash -c "
+      until pg_basebackup -U replicator -P --pgdata=/var/lib/postgresql/data -R --host=pgslave --port=5432 -v --wal-method=stream
+      do
+      echo 'Waiting for primary to connect...'
+      sleep 1s
+      done
+      echo 'pg_basebackup completed'
+      "
+
+    # command: |  # the second command
+    #   postgres 
+    #     -c primary_conninfo='host=pgslave port=5432 user=replicator password=pass application_name=pgslaveasync'
+
+    # depends_on:
+    #   - pgmaster     
+networks:
+  pgnet:
+

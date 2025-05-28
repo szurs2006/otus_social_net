@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "61e9479c-7338-4b2f-96dd-db7cb1dae106",
+		"name": "OTUS_SocialNet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17869484"
+	},
+	"item": [
+		{
+			"name": "send dialog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"from_user\": \"5\", \"to_user\": \"2\", \"dialog_text\": \"Созрели вишни в саду у тети Моти!\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8070/dialog/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"dialog",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list dialogs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"from_user\": \"5\", \"to_user\": \"2\", \"dialog_text\": \"Созрели вишни в саду у тети Моти!\"}"
+				},
+				"url": {
+					"raw": "http://localhost:8070/dialog/list/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"dialog",
+						"list",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

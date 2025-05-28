@@ -262,3 +262,49 @@ class PostgreSupport:
             finally:
                 cursor.close()
                 print('cursor closed')
+
+    def add_dialog_text(self, **dialog_data):
+        if self.connection is not None:
+
+            id_from_user = dialog_data['from_user']
+            id_to_user = dialog_data['to_user']
+            dialog_text =dialog_data['dialog_text']
+            str_for_hash = f"{id_from_user}_{id_to_user}".encode('utf-8')
+            hash_object = hashlib.md5()
+            hash_object.update(str_for_hash)
+            hex_digest = hash_object.hexdigest()
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(
+                    'INSERT INTO dialogs (from_user, to_user, dtext, dist_key) VALUES (%s, %s, %s, %s)',
+                    (id_from_user, id_to_user, dialog_text, hex_digest))
+                self.connection.commit()
+                return True
+            except (Exception, psycopg2.Error) as error2:
+                print(f"Не удалось вставить диалог для: from_user={id_from_user}, to_user= {id_to_user}, dialog_text={dialog_text}: ", error2)
+                self.connection.rollback()
+            finally:
+                cursor.close()
+            return False
+
+    def get_dialogs_by_user_id(self, id_user):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            select_query = "SELECT * FROM dialogs WHERE from_user = %s OR to_user = %s ORDER BY created_at"
+            cond_for_select = (id_user, id_user)
+            try:
+                cursor.execute(select_query, cond_for_select)
+                user_dialogs = cursor.fetchall()
+                list_dialogs = []
+                for dialog in user_dialogs:
+                    dstr = f'from_user = {dialog[0]}, to_user = {dialog[1]}, text = {dialog[2]}'
+                    print(dstr)
+                    list_dialogs.append(dstr)
+
+                return list_dialogs
+            except (Exception, psycopg2.Error) as error:
+                print(f"id_user {id_user} не существует:", error)
+                return {}
+            finally:
+                cursor.close()
+                print('cursor closed')

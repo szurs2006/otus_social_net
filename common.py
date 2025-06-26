@@ -1,7 +1,16 @@
 from cache_support import CacheSupport
 from postgre_support import PostgreSupport
+
 import time
 import configparser
+
+
+def invalidate_cache(params: dict):
+    post_result = postgre_repl1.feed_friends_posts(params)
+    cache.set_posts_friends_to_cache(params, post_result)
+    print('Cache invalidated')
+    return post_result
+
 
 config = configparser.ConfigParser()
 config.read("config.cfg")
@@ -19,6 +28,9 @@ postgre_repl1 = PostgreSupport(user=config["DB_REPLICA_1"]["USERNAME"],
                                database=config["DB_REPLICA_1"]["DATABASE_NAME"])
 
 cache = CacheSupport()
+
+
+
 
 i = 0
 while not postgre.connect_db():

@@ -4,26 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="added invalidate cache">
-      <change afterPath="$PROJECT_DIR$/.idea/SocialNet.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="добавлена коллекция postman">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HomeWork5/~$чет по ДЗ5.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HomeWork5/Отчет по ДЗ5.docx" beforeDir="false" afterPath="$PROJECT_DIR$/HomeWork5/Отчет по ДЗ5.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cache_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cache_support.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/config.cfg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/postgre_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/postgre_support.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq_support.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/some_func.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +33,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -57,7 +52,7 @@
     &quot;Python.handlers.executor&quot;: &quot;Debug&quot;,
     &quot;Python.main.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/PyProjects/irm-dpsc-collector&quot;
+    &quot;last_opened_file_path&quot;: &quot;D:/PyProjects/pythonProject/TestRMQ&quot;
   }
 }</component>
   <component name="RunManager">
@@ -185,7 +180,39 @@
       <option name="project" value="LOCAL" />
       <updated>1729236789912</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="release 07.12.24">
+      <option name="closed" value="true" />
+      <created>1733546678344</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733546678344</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added HomeWork3">
+      <option name="closed" value="true" />
+      <created>1744890975569</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1744890975569</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Выполнение ДЗ №5. изменено приложение для создания диалогов с использованием шардинга и создан отчет.">
+      <option name="closed" value="true" />
+      <created>1748417870219</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1748417870219</updated>
+    </task>
+    <task id="LOCAL-00014" summary="добавлена коллекция postman">
+      <option name="closed" value="true" />
+      <created>1748418127038</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1748418127038</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -211,20 +238,29 @@
     <MESSAGE value="added post/feed" />
     <MESSAGE value="added cache" />
     <MESSAGE value="added invalidate cache" />
-    <option name="LAST_COMMIT_MESSAGE" value="added invalidate cache" />
+    <MESSAGE value="release 07.12.24" />
+    <MESSAGE value="added HomeWork3" />
+    <MESSAGE value="Выполнение ДЗ №5. изменено приложение для создания диалогов с использованием шардинга и создан отчет." />
+    <MESSAGE value="добавлена коллекция postman" />
+    <option name="LAST_COMMIT_MESSAGE" value="добавлена коллекция postman" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/handlers.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="30" />
+          <line>184</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/handlers.py</url>
-          <line>146</line>
-          <option name="timeStamp" value="38" />
+          <line>171</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

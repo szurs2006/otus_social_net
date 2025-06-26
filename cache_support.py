@@ -40,10 +40,15 @@ class CacheSupport:
             return False
 
     def get_posts_friends_from_cache(self, params):
-        cache_value = self.connection.get(params['id_user'])
-        if cache_value is not None:
-            print('Load from Cache')
-            return cache_value
+        cache_value = None
+        if self.connection.exists(params['id_user']):
+            cache_value = self.connection.get(params['id_user'])
+            # if cache_value is not None:
+            if cache_value == b'[]':
+                cache_value = None
+            else:
+                print('Load from Cache')
+                return cache_value
         return cache_value
 
     def set_posts_friends_to_cache(self, params: dict, obj_posts: object):

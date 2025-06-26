@@ -1,19 +1,25 @@
+import asyncio
 from fastapi import APIRouter, Request, Response
 import json
 from common import postgre
 from common import postgre_repl1
 from common import cache
+from common import invalidate_cache
+from rabbitmq_support import RabbitMQService
 
 
-def invalidate_cache(params: dict):
-    post_result = postgre_repl1.feed_friends_posts(params)
-    cache.set_posts_friends_to_cache(params, post_result)
-    print('Cache invalidated')
-    return post_result
+# --- Константы ---
+RABBITMQ_URL = "amqp://guest:guest@localhost/"
+QUEUE_NAME = "my_queue"
 
+rabbitmq_service = RabbitMQService(RABBITMQ_URL, QUEUE_NAME)
 
 router = APIRouter()
 
+@router.on_event("startup")
+async def startup():
+    await rabbitmq_service.connect()
+    asyncio.create_task(rabbitmq_service.start_consumer())
 
 @router.get("/")
 async def root(request: Request):
@@ -170,16 +176,22 @@ async def create_post(request: Request, response: Response):
 
     print(f'id_user = {obj_post["id_user"]}, new_post = {obj_post["new_post"]}')
 
-    if postgre.add_post(id_user=id_user,
-                        new_post=new_post):
-        res_data = f'You added new post for user with id = {id_user}!'
+    res_data = f'You added new post for user with id = {id_user}!'
+    if postgre.add_post(id_user=id_user, new_post=new_post):
+        rabbitmq_service.send('', obj_post)
 
-        users_invalidated = postgre.get_users_by_friend(id_user)
-        for user_inv in users_invalidated:
-            users_obj = {'id_user': user_inv}
-            invalidate_cache(users_obj)
-    else:
-        res_data = 'You cannot add new post!!'
+
+
+    # if postgre.add_post(id_user=id_user,
+    #                     new_post=new_post):
+    #     users_invalidated = postgre.get_users_by_friend(id_user)
+    #     for user_inv in users_invalidated:
+    #         users_obj = {'id_user': user_inv}
+    #         invalidate_cache(users_obj)
+    #         # userrkey = get_routekey_for user(user_inv)
+    #         # send_mes_to_queue(userrkey)
+    # else:
+    #     res_data = 'You cannot add new post!!'
 
     response.headers['content-type'] = 'application/json'  # 'text/html'
 

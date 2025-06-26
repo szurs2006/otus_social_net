@@ -207,7 +207,7 @@ class PostgreSupport:
                             FROM users_posts up, users_friends uf 
                             WHERE uf.id_user =  %s
                             AND uf.id_friend = up.id_user  
-                            ORDER BY up.id_user, up.post_created LIMIT %s"""
+                            ORDER BY up.post_created, up.id_user LIMIT %s"""
             # cond_for_select = (params['id_user'], params['offset'], params['limit'])
             cond_for_select = (params['id_user'], limit)
             try:
@@ -230,6 +230,9 @@ class PostgreSupport:
                 cursor.execute(
                     'INSERT INTO users_posts (id_user, post) VALUES (%s, %s)',
                     (user_data['id_user'], user_data['new_post']))
+                cursor.execute(
+                    'REFRESH MATERIALIZED VIEW CONCURRENTLY feed_posts;'
+                )
                 self.connection.commit()
                 return True
             except (Exception, psycopg2.Error) as error2:
@@ -308,3 +311,18 @@ class PostgreSupport:
             finally:
                 cursor.close()
                 print('cursor closed')
+
+    def refresh_feed_posts(self):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            try:
+                cursor.execute(
+                    'REFRESH MATERIALIZED VIEW CONCURRENTLY feed_posts;'
+                )
+                self.connection.commit()
+            except (Exception, psycopg2.Error) as error2:
+                print(f"Не удалось сделать refresh_feed_posts: ", error2)
+                self.connection.rollback()
+            finally:
+                cursor.close()
+            return 0

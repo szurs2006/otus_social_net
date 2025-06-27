@@ -1,23 +1,8 @@
 import asyncio
 import aio_pika
 import json
-from common import cache
 from common import postgre
 from common import invalidate_cache
-
-
-# async def rabbit_posts_callback(body: aio_pika.IncomingMessage):
-#     async with body.process():
-#         obj_post = json.loads(body)
-#         print(" [x] Received %r" % (body,))
-#         id_user = obj_post["id_user"]
-#         new_post = obj_post["new_post"]
-#
-#         users_invalidated = postgre.get_users_by_friend(id_user)
-#         for user_inv in users_invalidated:
-#             users_obj = {'id_user': user_inv}
-#             invalidate_cache(users_obj)
-#         postgre.refresh_feed_posts()
 
 
 class RabbitMQService:

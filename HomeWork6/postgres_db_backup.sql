@@ -2,7 +2,7 @@
 -- PostgreSQL database cluster dump
 --
 
--- Started on 2025-06-26 11:57:17
+-- Started on 2025-06-27 15:31:06
 
 SET default_transaction_read_only = off;
 
@@ -44,7 +44,7 @@ ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-06-26 11:57:17
+-- Started on 2025-06-27 15:31:06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -57,7 +57,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Completed on 2025-06-26 11:57:17
+-- Completed on 2025-06-27 15:31:06
 
 --
 -- PostgreSQL database dump complete
@@ -76,7 +76,7 @@ SET row_security = off;
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-06-26 11:57:17
+-- Started on 2025-06-27 15:31:06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -98,7 +98,7 @@ CREATE EXTENSION IF NOT EXISTS citus WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3600 (class 0 OID 0)
+-- TOC entry 3602 (class 0 OID 0)
 -- Dependencies: 3
 -- Name: EXTENSION citus; Type: COMMENT; Schema: -; Owner: 
 --
@@ -115,7 +115,7 @@ CREATE EXTENSION IF NOT EXISTS citus_columnar WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3601 (class 0 OID 0)
+-- TOC entry 3603 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION citus_columnar; Type: COMMENT; Schema: -; Owner: 
 --
@@ -128,7 +128,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 278 (class 1259 OID 17247)
+-- TOC entry 280 (class 1259 OID 17247)
 -- Name: users_friends; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -142,7 +142,7 @@ CREATE TABLE public.users_friends (
 ALTER TABLE public.users_friends OWNER TO postgres;
 
 --
--- TOC entry 281 (class 1259 OID 17252)
+-- TOC entry 283 (class 1259 OID 17252)
 -- Name: users_posts; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -157,7 +157,7 @@ CREATE TABLE public.users_posts (
 ALTER TABLE public.users_posts OWNER TO postgres;
 
 --
--- TOC entry 283 (class 1259 OID 25429)
+-- TOC entry 285 (class 1259 OID 25429)
 -- Name: feed_posts; Type: MATERIALIZED VIEW; Schema: public; Owner: postgres
 --
 
@@ -174,7 +174,7 @@ CREATE MATERIALIZED VIEW public.feed_posts AS
 ALTER MATERIALIZED VIEW public.feed_posts OWNER TO postgres;
 
 --
--- TOC entry 275 (class 1259 OID 17236)
+-- TOC entry 277 (class 1259 OID 17236)
 -- Name: logins; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -189,7 +189,7 @@ CREATE TABLE public.logins (
 ALTER TABLE public.logins OWNER TO postgres;
 
 --
--- TOC entry 276 (class 1259 OID 17241)
+-- TOC entry 278 (class 1259 OID 17241)
 -- Name: logins_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -204,8 +204,8 @@ CREATE SEQUENCE public.logins_id_seq
 ALTER SEQUENCE public.logins_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3602 (class 0 OID 0)
--- Dependencies: 276
+-- TOC entry 3604 (class 0 OID 0)
+-- Dependencies: 278
 -- Name: logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -213,7 +213,7 @@ ALTER SEQUENCE public.logins_id_seq OWNED BY public.logins.id;
 
 
 --
--- TOC entry 277 (class 1259 OID 17242)
+-- TOC entry 279 (class 1259 OID 17242)
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -231,7 +231,7 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 279 (class 1259 OID 17250)
+-- TOC entry 281 (class 1259 OID 17250)
 -- Name: users_friends_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -246,8 +246,8 @@ CREATE SEQUENCE public.users_friends_id_seq
 ALTER SEQUENCE public.users_friends_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3603 (class 0 OID 0)
--- Dependencies: 279
+-- TOC entry 3605 (class 0 OID 0)
+-- Dependencies: 281
 -- Name: users_friends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -255,7 +255,7 @@ ALTER SEQUENCE public.users_friends_id_seq OWNED BY public.users_friends.id;
 
 
 --
--- TOC entry 280 (class 1259 OID 17251)
+-- TOC entry 282 (class 1259 OID 17251)
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -270,8 +270,8 @@ CREATE SEQUENCE public.users_id_seq
 ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3604 (class 0 OID 0)
--- Dependencies: 280
+-- TOC entry 3606 (class 0 OID 0)
+-- Dependencies: 282
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -279,7 +279,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 282 (class 1259 OID 17258)
+-- TOC entry 284 (class 1259 OID 17258)
 -- Name: users_posts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -294,8 +294,8 @@ CREATE SEQUENCE public.users_posts_id_seq
 ALTER SEQUENCE public.users_posts_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3605 (class 0 OID 0)
--- Dependencies: 282
+-- TOC entry 3607 (class 0 OID 0)
+-- Dependencies: 284
 -- Name: users_posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -303,7 +303,7 @@ ALTER SEQUENCE public.users_posts_id_seq OWNED BY public.users_posts.id;
 
 
 --
--- TOC entry 3417 (class 2604 OID 17259)
+-- TOC entry 3419 (class 2604 OID 17259)
 -- Name: logins id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -311,7 +311,7 @@ ALTER TABLE ONLY public.logins ALTER COLUMN id SET DEFAULT nextval('public.login
 
 
 --
--- TOC entry 3418 (class 2604 OID 17260)
+-- TOC entry 3420 (class 2604 OID 17260)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -319,7 +319,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 3419 (class 2604 OID 17261)
+-- TOC entry 3421 (class 2604 OID 17261)
 -- Name: users_friends id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -327,7 +327,7 @@ ALTER TABLE ONLY public.users_friends ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 3420 (class 2604 OID 17262)
+-- TOC entry 3422 (class 2604 OID 17262)
 -- Name: users_posts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -335,8 +335,8 @@ ALTER TABLE ONLY public.users_posts ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3586 (class 0 OID 17236)
--- Dependencies: 275
+-- TOC entry 3588 (class 0 OID 17236)
+-- Dependencies: 277
 -- Data for Name: logins; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -348,8 +348,8 @@ COPY public.logins (id, id_user, login, password) FROM stdin;
 
 
 --
--- TOC entry 3588 (class 0 OID 17242)
--- Dependencies: 277
+-- TOC entry 3590 (class 0 OID 17242)
+-- Dependencies: 279
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -458,8 +458,8 @@ COPY public.users (id, name, name_last, date_birth, sex, city, interests) FROM s
 
 
 --
--- TOC entry 3589 (class 0 OID 17247)
--- Dependencies: 278
+-- TOC entry 3591 (class 0 OID 17247)
+-- Dependencies: 280
 -- Data for Name: users_friends; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -470,8 +470,8 @@ COPY public.users_friends (id, id_user, id_friend) FROM stdin;
 
 
 --
--- TOC entry 3592 (class 0 OID 17252)
--- Dependencies: 281
+-- TOC entry 3594 (class 0 OID 17252)
+-- Dependencies: 283
 -- Data for Name: users_posts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -483,12 +483,25 @@ COPY public.users_posts (id, id_user, post, post_created) FROM stdin;
 5	3	Сегодня очень хороший день!	2025-06-10 07:50:19.529269+00
 6	3	Сегодня очень хороший день!	2025-06-19 12:06:02.87774+00
 7	3	Все время идет дождь!	2025-06-19 12:06:06.086055+00
+10	4	Надо так надо!	2025-06-27 06:57:58.138832+00
+11	4	А может нет!	2025-06-27 06:59:44.823403+00
+12	4	Еще раз!	2025-06-27 07:05:19.269672+00
+13	4	HI Еще раз!	2025-06-27 07:08:14.730195+00
+14	4	НУ! Еще раз!	2025-06-27 07:12:05.41041+00
+15	4	Да! Еще раз!	2025-06-27 07:12:56.863315+00
+16	2	Проверка связи!	2025-06-27 07:22:38.708233+00
+17	3	Проверка связи друг 3!	2025-06-27 07:24:46.1176+00
+18	2	Этоя я, второй друг!	2025-06-27 07:49:45.331923+00
+19	2	Это я, второй друг! Шлю привет!	2025-06-27 09:58:46.62048+00
+20	2	Это я, третий друг! Шлю привет!	2025-06-27 10:05:23.259036+00
+21	3	Это я, третий друг! Как дела!	2025-06-27 10:08:04.711067+00
+22	3	Это я, третий друг! Пойдем гулять?	2025-06-27 10:09:30.10918+00
 \.
 
 
 --
--- TOC entry 3606 (class 0 OID 0)
--- Dependencies: 276
+-- TOC entry 3608 (class 0 OID 0)
+-- Dependencies: 278
 -- Name: logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -496,8 +509,8 @@ SELECT pg_catalog.setval('public.logins_id_seq', 1, false);
 
 
 --
--- TOC entry 3607 (class 0 OID 0)
--- Dependencies: 279
+-- TOC entry 3609 (class 0 OID 0)
+-- Dependencies: 281
 -- Name: users_friends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -505,8 +518,8 @@ SELECT pg_catalog.setval('public.users_friends_id_seq', 2, true);
 
 
 --
--- TOC entry 3608 (class 0 OID 0)
--- Dependencies: 280
+-- TOC entry 3610 (class 0 OID 0)
+-- Dependencies: 282
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -514,38 +527,38 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
--- TOC entry 3609 (class 0 OID 0)
--- Dependencies: 282
+-- TOC entry 3611 (class 0 OID 0)
+-- Dependencies: 284
 -- Name: users_posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_posts_id_seq', 7, true);
+SELECT pg_catalog.setval('public.users_posts_id_seq', 22, true);
 
 
 --
--- TOC entry 3422 (class 1259 OID 25435)
+-- TOC entry 3424 (class 1259 OID 25461)
 -- Name: index_feed_posts; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX index_feed_posts ON public.feed_posts USING btree (id_user);
+CREATE UNIQUE INDEX index_feed_posts ON public.feed_posts USING btree (id_user, post_created);
 
 
 --
--- TOC entry 3594 (class 0 OID 25429)
--- Dependencies: 283 3596
+-- TOC entry 3596 (class 0 OID 25429)
+-- Dependencies: 285 3598
 -- Name: feed_posts; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: postgres
 --
 
 REFRESH MATERIALIZED VIEW public.feed_posts;
 
 
--- Completed on 2025-06-26 11:57:17
+-- Completed on 2025-06-27 15:31:07
 
 --
 -- PostgreSQL database dump complete
 --
 
--- Completed on 2025-06-26 11:57:17
+-- Completed on 2025-06-27 15:31:07
 
 --
 -- PostgreSQL database cluster dump complete

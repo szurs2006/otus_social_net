@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="RabbitMQ работает">
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="Добавлены web-сокеты">
+      <change afterPath="$PROJECT_DIR$/HomeWork6/~$чет по ДЗ6.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HomeWork6/Отчет по ДЗ6.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/postgre_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/postgre_support.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HomeWork6/postgres_db_backup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/HomeWork6/postgres_db_backup.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitmq_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq_support.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +27,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "szurs2006"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/szurs2006/otus_social_net.git",
+    "accountId": "da440502-8953-48de-95d8-2ad195f2d347"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -218,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751014226691</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Добавлены web-сокеты">
+      <option name="closed" value="true" />
+      <created>1751020188778</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1751020188778</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -250,7 +272,8 @@
     <MESSAGE value="добавлена коллекция postman" />
     <MESSAGE value="check some errors" />
     <MESSAGE value="RabbitMQ работает" />
-    <option name="LAST_COMMIT_MESSAGE" value="RabbitMQ работает" />
+    <MESSAGE value="Добавлены web-сокеты" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлены web-сокеты" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

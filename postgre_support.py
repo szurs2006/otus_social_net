@@ -324,3 +324,25 @@ class PostgreSupport:
             finally:
                 cursor.close()
             return 0
+
+    def get_user_feed(self, id_user, timeout):
+        if self.connection is not None:
+            cursor = self.connection.cursor()
+            if timeout > 0:
+                select_query = "SELECT * FROM feed_posts WHERE id_user = %s AND post_created > now() - interval '%s seconds'"
+                cond_for_select = (id_user, timeout,)
+            else:
+                select_query = "SELECT * FROM feed_posts WHERE id_user = %s"
+                cond_for_select = (id_user,)
+            try:
+                cursor.execute(select_query, cond_for_select)
+                self.connection.commit()
+                user_data = cursor.fetchall()
+                print(f'user_data = {user_data}')
+                return user_data
+            except (Exception, psycopg2.Error) as error:
+                print(f"id_user {id_user} не существует:", error)
+                return {}
+            finally:
+                cursor.close()
+                print('cursor closed')

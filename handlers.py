@@ -1,12 +1,12 @@
 import asyncio
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, WebSocket, WebSocketDisconnect
 import json
 from common import postgre
 from common import postgre_repl1
 from common import cache
 from common import invalidate_cache
 from rabbitmq_support import RabbitMQService
-
+from typing import Dict
 
 # --- Константы ---
 RABBITMQ_URL = "amqp://guest:guest@localhost/"
@@ -16,10 +16,12 @@ rabbitmq_service = RabbitMQService(RABBITMQ_URL, QUEUE_NAME)
 
 router = APIRouter()
 
+
 @router.on_event("startup")
 async def startup():
     await rabbitmq_service.connect()
     asyncio.create_task(rabbitmq_service.start_consumer())
+
 
 @router.get("/")
 async def root(request: Request):
@@ -182,8 +184,6 @@ async def create_post(request: Request, response: Response):
         res_data = f'You added new post for user with id = {id_user}!'
         await rabbitmq_service.send(obj_post)
 
-
-
     # if postgre.add_post(id_user=id_user,
     #                     new_post=new_post):
     #     users_invalidated = postgre.get_users_by_friend(id_user)
@@ -247,9 +247,9 @@ async def send_dialog(request: Request, response: Response):
 
     return Response(res_data)
 
+
 @router.get("/dialog/list/{id_user}")
 def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
-
     user_dict = postgre_repl1.get_dialogs_by_user_id(id_user)
     res_obj = {
         'id_user': id_user,
@@ -265,3 +265,36 @@ def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
 
     # print(res_data)
     return Response(content=json.dumps(user_dict), media_type="application/json")
+
+
+clients: Dict[WebSocket, str] = {}
+
+
+@router.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: int):
+    await websocket.accept()
+
+    clients[websocket] = user_id
+
+    user_dict = postgre_repl1.get_user_data(user_id)
+    if user_dict is not None and len(user_dict) != 0:
+        await websocket.send_text(f"Здравствуйте, {user_dict['name']} {user_dict['name_last']}")
+        clients[websocket] = user_id
+        print(f"{user_id} подключился.")
+
+        await websocket.send_text(f"Cейчас подгоню ленту постов друзей:")
+        feed_list = postgre_repl1.get_user_feed(user_id, 0)
+        if feed_list is not None and len(feed_list) != 0:
+            for feed in feed_list:
+                await websocket.send_text(feed[1])
+        try:
+            while True:
+                await asyncio.sleep(10)
+                feed_list = postgre_repl1.get_user_feed(user_id, 10)
+                if feed_list is not None and len(feed_list) != 0:
+                    for feed in feed_list:
+                        await websocket.send_text(feed[1])
+        except WebSocketDisconnect:
+            print(f"{user_id} отключился.")
+            del clients[websocket]
+

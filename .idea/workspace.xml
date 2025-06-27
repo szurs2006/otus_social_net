@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="check some errors">
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="RabbitMQ работает">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HomeWork6/mat_view_feed_posts.sql" beforeDir="false" afterPath="$PROJECT_DIR$/HomeWork6/mat_view_feed_posts.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/postgre_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/postgre_support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq_support.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750941771117</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="RabbitMQ работает">
+      <option name="closed" value="true" />
+      <created>1751014226691</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1751014226691</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -243,7 +249,8 @@
     <MESSAGE value="Выполнение ДЗ №5. изменено приложение для создания диалогов с использованием шардинга и создан отчет." />
     <MESSAGE value="добавлена коллекция postman" />
     <MESSAGE value="check some errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="check some errors" />
+    <MESSAGE value="RabbitMQ работает" />
+    <option name="LAST_COMMIT_MESSAGE" value="RabbitMQ работает" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

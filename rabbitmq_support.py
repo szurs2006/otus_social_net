@@ -44,17 +44,17 @@ class RabbitMQService:
     async def start_consumer(self):
         async def handle_message(message: aio_pika.IncomingMessage):
             async with message.process():
-                obj_post = json.loads(message)
                 print(" [x] Received %r" % (message,))
+                obj_post = json.loads(message.body)
                 id_user = obj_post["id_user"]
                 new_post = obj_post["new_post"]
 
-                users_invalidated = postgre.get_users_by_friend(id_user)
-                for user_inv in users_invalidated:
-                    users_obj = {'id_user': user_inv}
-                    invalidate_cache(users_obj)
-                postgre.refresh_feed_posts()
-
+                followers = postgre.get_users_by_friend(id_user)
+                if len(followers) > 0:
+                    postgre.refresh_feed_posts()
+                    for user_inv in followers:
+                        users_obj = {'id_user': user_inv}
+                        invalidate_cache(users_obj)
         await self.queue.consume(handle_message)
         print("[*] Consumer started")
 

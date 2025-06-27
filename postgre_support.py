@@ -230,9 +230,6 @@ class PostgreSupport:
                 cursor.execute(
                     'INSERT INTO users_posts (id_user, post) VALUES (%s, %s)',
                     (user_data['id_user'], user_data['new_post']))
-                cursor.execute(
-                    'REFRESH MATERIALIZED VIEW CONCURRENTLY feed_posts;'
-                )
                 self.connection.commit()
                 return True
             except (Exception, psycopg2.Error) as error2:
@@ -318,6 +315,7 @@ class PostgreSupport:
             try:
                 cursor.execute(
                     'REFRESH MATERIALIZED VIEW CONCURRENTLY feed_posts;'
+                    # 'REFRESH MATERIALIZED VIEW feed_posts;'
                 )
                 self.connection.commit()
             except (Exception, psycopg2.Error) as error2:

@@ -176,9 +176,11 @@ async def create_post(request: Request, response: Response):
 
     print(f'id_user = {obj_post["id_user"]}, new_post = {obj_post["new_post"]}')
 
-    res_data = f'You added new post for user with id = {id_user}!'
+    res_data = 'You cannot add new post!!'
+
     if postgre.add_post(id_user=id_user, new_post=new_post):
-        rabbitmq_service.send('', obj_post)
+        res_data = f'You added new post for user with id = {id_user}!'
+        await rabbitmq_service.send(obj_post)
 
 
 

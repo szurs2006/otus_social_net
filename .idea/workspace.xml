@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="Добавлены web-сокеты">
-      <change afterPath="$PROJECT_DIR$/HomeWork6/~$чет по ДЗ6.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork6/Отчет по ДЗ6.docx" afterDir="false" />
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="Добавлено описание домашнего задания 6">
+      <change afterPath="$PROJECT_DIR$/HomeWork7/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HomeWork7/only_100_users.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HomeWork6/postgres_db_backup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/HomeWork6/postgres_db_backup.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rabbitmq_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitmq_support.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cache_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cache_support.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/config.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,18 +31,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "szurs2006"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;szurs2006&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/szurs2006/otus_social_net.git",
-    "accountId": "da440502-8953-48de-95d8-2ad195f2d347"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/szurs2006/otus_social_net.git&quot;,
+    &quot;accountId&quot;: &quot;da440502-8953-48de-95d8-2ad195f2d347&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -50,15 +54,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.handlers.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/PyProjects/pythonProject/TestRMQ&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.handlers.executor": "Debug",
+    "Python.main.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/PyProjects/SocialNet/SocialNet/HomeWork7"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PyProjects\SocialNet\SocialNet\HomeWork7" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SocialNet" />
@@ -240,7 +249,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751020188778</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Добавлено описание домашнего задания 6">
+      <option name="closed" value="true" />
+      <created>1751023270351</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1751023270351</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -273,7 +290,8 @@
     <MESSAGE value="check some errors" />
     <MESSAGE value="RabbitMQ работает" />
     <MESSAGE value="Добавлены web-сокеты" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлены web-сокеты" />
+    <MESSAGE value="Добавлено описание домашнего задания 6" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлено описание домашнего задания 6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

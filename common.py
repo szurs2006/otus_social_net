@@ -27,7 +27,10 @@ postgre_repl1 = PostgreSupport(user=config["DB_REPLICA_1"]["USERNAME"],
                                port=config["DB_REPLICA_1"]["PORT"],
                                database=config["DB_REPLICA_1"]["DATABASE_NAME"])
 
-cache = CacheSupport()
+cache = CacheSupport(user=config["DB_REDIS"]["USER"],
+                     password=config["DB_REDIS"]["PASSWORD"],
+                     host=config["DB_REDIS"]["IP_ADDRESS"],
+                     port=config["DB_REDIS"]["PORT"])
 
 
 

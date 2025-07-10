@@ -3,21 +3,21 @@ import json
 
 
 class CacheSupport:
+    def __init__(self, **connp):
+        self.user = connp['user']
+        self.password = connp['password']
+        self.host = connp['host']
+        self.port = connp['port']
     # def __init__(self, user="default",
-    #              password="redispw",
-    #              host="redis_db",
-    #              port="6379"
-    #              ):
-    def __init__(self, user="default",
-                     password="redispw",
-                     host="localhost",
-                     port="49153"
-                     ):
-        self.connection = None
-        self.user = user
-        self.password = password
-        self.host = host
-        self.port = port
+    #                  password="redispw",
+    #                  host="172.18.0.3",#"localhost",
+    #                  port="49153"
+    #                  ):
+    #     self.connection = None
+    #     self.user = user
+    #     self.password = password
+    #     self.host = host
+    #     self.port = port
         print(f'Redis host = {self.host}, port = {self.port}')
 
     def __del__(self):

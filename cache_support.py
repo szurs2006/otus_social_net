@@ -33,6 +33,7 @@ class CacheSupport:
                                           password=self.password,
                                           decode_responses=False)
             self.connection.flushall()
+            self.register_lua_func()
             print("Соединение с Redis открыто")
             return True
         except Exception as error:
@@ -53,3 +54,89 @@ class CacheSupport:
 
     def set_posts_friends_to_cache(self, params: dict, obj_posts: object):
         self.connection.set(params['id_user'], json.dumps(obj_posts, default=str))
+
+    def register_lua_func(self):
+        lua_code = """
+        #!lua name=hashmod
+
+        redis.register_function('store_string_with_hash', function(keys, args)
+            local num1 = tonumber(args[1])
+            local num2 = tonumber(args[2])
+            local input_str = args[3]
+            if not num1 or not num2 or not input_str then
+                error("Неверные аргументы")
+            end
+            local sorted_nums = {}
+            if num1 < num2 then
+                sorted_nums = {num1, num2}
+            else
+                sorted_nums = {num2, num1}
+            end
+            local key_base = tostring(sorted_nums[1]) .. ":" .. tostring(sorted_nums[2])
+            local key_hash = redis.sha1hex(key_base)
+            redis.call("SET", key_hash, input_str)
+            return key_hash
+        end)
+
+        redis.register_function('get_string_by_hash', function(keys, args)
+            local num1 = tonumber(args[1])
+            local num2 = tonumber(args[2])
+            if not num1 or not num2 then
+                error("Неверные аргументы")
+            end
+            local sorted_nums = {}
+            if num1 < num2 then
+                sorted_nums = {num1, num2}
+            else
+                sorted_nums = {num2, num1}
+            end
+            local key_base = tostring(sorted_nums[1]) .. ":" .. tostring(sorted_nums[2])
+            local key_hash = redis.sha1hex(key_base)
+            local value = redis.call("GET", key_hash)
+            return value
+        end)
+        """
+        # try:
+        #     self.connection.execute_command('FUNCTION', 'DELETE', 'hashmod')
+        # except redis.exceptions.ResponseError:
+        #     pass
+        try:
+            # result = self.connection.execute_command('FUNCTION', 'LOAD', 'LUA', lua_code)
+            result = self.connection.register_script(lua_code)
+            print(f"Загружено на ноду {self.host}:{self.port}: {result}")
+        except(Exception, redis.RedisError) as error:
+            print(f"Не загружено на ноду {self.host}:{self.port} - {error} !!")
+            # print(f"Не загружено на ноду {self.host}:{self.port} - {redis.exceptions.ResponseError} !!")
+
+    def add_dialog_text(self, **dialog_data):
+        if self.connection is not None:
+            id_from_user = dialog_data['from_user']
+            id_to_user = dialog_data['to_user']
+            dialog_text = dialog_data['dialog_text']
+
+            key_hash = self.connection.fcall('store_string_with_hash', 0, id_from_user, id_to_user, dialog_text)
+            self.connection.set(id_from_user, key_hash)
+            self.connection.set(id_to_user, key_hash)
+            print("Сохранили под ключом:", key_hash)
+
+    def get_dialog_users(self, **dialog_data):
+        if self.connection is not None:
+            id_from_user = dialog_data['from_user']
+            id_to_user = dialog_data['to_user']
+
+            stored_value = self.connection.fcall('get_string_by_hash', 0, id_from_user, id_to_user)
+            print("Получили из Redis:", stored_value)
+
+    def get_dialogs_by_user_id(self, id_user):
+        if self.connection is not None:
+            id_from_user = dialog_data['from_user']
+            id_to_user = dialog_data['to_user']
+
+            stored_value = self.connection.fcall('get_string_by_hash', 0, id_from_user, id_to_user)
+            print("Получили из Redis:", stored_value)
+
+
+
+
+
+

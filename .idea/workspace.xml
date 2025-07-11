@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="Добавлено описание домашнего задания 6">
-      <change afterPath="$PROJECT_DIR$/HomeWork7/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork7/only_100_users.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ7 проверка docker-compose">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cache_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cache_support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/config.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751023270351</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="ДЗ7 проверка docker-compose">
+      <option name="closed" value="true" />
+      <created>1752152190694</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1752152190694</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -291,7 +292,8 @@
     <MESSAGE value="RabbitMQ работает" />
     <MESSAGE value="Добавлены web-сокеты" />
     <MESSAGE value="Добавлено описание домашнего задания 6" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлено описание домашнего задания 6" />
+    <MESSAGE value="ДЗ7 проверка docker-compose" />
+    <option name="LAST_COMMIT_MESSAGE" value="ДЗ7 проверка docker-compose" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -300,6 +302,16 @@
           <url>file://$PROJECT_DIR$/main.py</url>
           <line>13</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/handlers.py</url>
+          <line>230</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/cache_support.py</url>
+          <line>104</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

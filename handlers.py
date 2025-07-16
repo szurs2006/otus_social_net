@@ -238,7 +238,7 @@ async def send_dialog(request: Request, response: Response):
 
     print(f'from_user = {from_user}, to_user = {to_user}, dialog_text = {dialog_text}')
 
-    if postgre.add_dialog_text(from_user=from_user, to_user=to_user, dialog_text=dialog_text):
+    if cache.add_dialog_text(from_user=from_user, to_user=to_user, dialog_text=dialog_text):
         res_data = f'You added new dialog for user with id = {to_user}!'
     else:
         res_data = 'You cannot add new dialog!!'
@@ -250,7 +250,7 @@ async def send_dialog(request: Request, response: Response):
 
 @router.get("/dialog/list/{id_user}")
 def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
-    user_dict = postgre_repl1.get_dialogs_by_user_id(id_user)
+    user_dict = cache.get_dialogs_by_user_id(id_user)
     res_obj = {
         'id_user': id_user,
         'res_text': "Cannot find user!"

@@ -1,6 +1,6 @@
 import redis
 import json
-
+import datetime
 
 class CacheSupport:
     def __init__(self, **connp):
@@ -63,6 +63,8 @@ class CacheSupport:
             local num1 = tonumber(args[1])
             local num2 = tonumber(args[2])
             local input_str = args[3]
+            
+            redis.log(redis.LOG_NOTICE, "ARGS: " .. tostring(num1) .. ", " .. tostring(num2) .. ", " .. input_str)
             if not num1 or not num2 or not input_str then
                 error("Неверные аргументы")
             end
@@ -74,7 +76,14 @@ class CacheSupport:
             end
             local key_base = tostring(sorted_nums[1]) .. ":" .. tostring(sorted_nums[2])
             local key_hash = redis.sha1hex(key_base)
-            redis.call("SET", key_hash, input_str)
+            
+            local now = redis.call('TIME')
+            local seconds = tonumber(now[1])
+            local microseconds = tonumber(now[2])
+            local timestamp = seconds + microseconds / 1000000
+            
+            redis.call('ZADD', key_hash, timestamp, input_str)
+            -- redis.call("SET", key_hash, input_str)
             return key_hash
         end)
 
@@ -92,7 +101,20 @@ class CacheSupport:
             end
             local key_base = tostring(sorted_nums[1]) .. ":" .. tostring(sorted_nums[2])
             local key_hash = redis.sha1hex(key_base)
-            local value = redis.call("GET", key_hash)
+            
+            ------------------------
+            local now = redis.call('TIME')
+            local seconds = tonumber(now[1])
+            local microseconds = tonumber(now[2])
+            local timestamp = seconds + microseconds / 1000000
+            
+            local window = 30*24*3600 -- 1 месяц 
+            
+            local start_ts = timestamp - window
+            ------------------------
+            
+            local value = redis.call('ZRANGEBYSCORE', key_hash, start_ts, timestamp, 'WITHSCORES')
+            -- local value = redis.call("GET", key_hash)
             return value
         end)
         """
@@ -115,8 +137,8 @@ class CacheSupport:
             dialog_text = dialog_data['dialog_text']
 
             key_hash = self.connection.fcall('store_string_with_hash', 0, id_from_user, id_to_user, dialog_text)
-            self.connection.set(id_from_user, key_hash)
-            self.connection.set(id_to_user, key_hash)
+            self.connection.zadd(id_from_user, {key_hash:  datetime.datetime.now().timestamp()})
+            self.connection.zadd(id_to_user, {key_hash:  datetime.datetime.now().timestamp()})
             print("Сохранили под ключом:", key_hash)
 
     def get_dialog_users(self, **dialog_data):

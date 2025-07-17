@@ -86,37 +86,6 @@ class CacheSupport:
 
             return key_hash
         end)
-
-        redis.register_function('get_string_by_users', function(keys, args)
-            local num1 = tonumber(args[1])
-            local num2 = tonumber(args[2])
-            if not num1 or not num2 then
-                error("Неверные аргументы")
-            end
-            local sorted_nums = {}
-            if num1 < num2 then
-                sorted_nums = {num1, num2}
-            else
-                sorted_nums = {num2, num1}
-            end
-            local key_base = tostring(sorted_nums[1]) .. ":" .. tostring(sorted_nums[2])
-            local key_hash = redis.sha1hex(key_base)
-            
-            ------------------------
-            local now = redis.call('TIME')
-            local seconds = tonumber(now[1])
-            local microseconds = tonumber(now[2])
-            local timestamp = seconds + microseconds / 1000000
-            
-            local window = 30*24*3600 -- 1 месяц 
-            
-            local start_ts = timestamp - window
-            ------------------------
-            
-            local value = redis.call('ZRANGEBYSCORE', key_hash, start_ts, timestamp, 'WITHSCORES')
-            -- local value = redis.call("GET", key_hash)
-            return value
-        end)
         
         redis.register_function('get_string_by_hash', function(keys, args)
             
@@ -163,14 +132,6 @@ class CacheSupport:
             print("Сохранили под ключом:", key_hash)
             return True
         return False
-
-    def get_dialog_users(self, **dialog_data):
-        if self.connection is not None:
-            id_from_user = dialog_data['from_user']
-            id_to_user = dialog_data['to_user']
-
-            stored_value = self.connection.fcall('get_string_by_users', 0, id_from_user, id_to_user)
-            print("Получили из Redis:", stored_value)
 
     def get_dialogs_by_user_id(self, id_user):
         if self.connection is not None:

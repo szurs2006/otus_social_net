@@ -253,7 +253,7 @@ def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
     user_dict = cache.get_dialogs_by_user_id(id_user)
     res_obj = {
         'id_user': id_user,
-        'res_text': "Cannot find user!"
+        'res_text': "No data for user!"
     }
     if not user_dict:
         user_dict = res_obj

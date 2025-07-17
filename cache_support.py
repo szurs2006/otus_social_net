@@ -78,12 +78,12 @@ class CacheSupport:
             local key_hash = redis.sha1hex(key_base)
             
             local now = redis.call('TIME')
-            local seconds = tonumber(now[1])
-            local microseconds = tonumber(now[2])
+            local seconds = tonumber(now[0])
+            local microseconds = tonumber(now[1])
             local timestamp = seconds + microseconds / 1000000
             
             redis.call('ZADD', key_hash, timestamp, input_str)
-            -- redis.call("SET", key_hash, input_str)
+
             return key_hash
         end)
 
@@ -179,9 +179,18 @@ class CacheSupport:
             uold = unow - udelta
             list_hash = self.connection.zrangebyscore(id_user, uold.timestamp(), unow.timestamp(), withscores=True)
 
-            list_dialogs = []
+            res_obj = {}
+            i = int(id_user)
             for ihash in list_hash:
                 stored_value = self.connection.fcall('get_string_by_hash', 0, ihash[0])
-                list_dialogs.append(stored_value)
+                i = i + 1
+                j = 0
+                for val in stored_value:
+                    dkey = 'dialog_' + str(i) + '.' + str(j+1)
+                    if j % 2 == 0:
+                        res_obj[dkey] = stored_value[j].decode()
+                    j = j + 1
 
-            print("Получили из Redis:", list_dialogs)
+            print("Получили из Redis:", res_obj)
+
+            return res_obj

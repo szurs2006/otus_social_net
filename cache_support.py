@@ -2,22 +2,23 @@ import redis
 import json
 import datetime
 
+
 class CacheSupport:
     def __init__(self, **connp):
         self.user = connp['user']
         self.password = connp['password']
         self.host = connp['host']
         self.port = connp['port']
-    # def __init__(self, user="default",
-    #                  password="redispw",
-    #                  host="172.18.0.3",#"localhost",
-    #                  port="49153"
-    #                  ):
-    #     self.connection = None
-    #     self.user = user
-    #     self.password = password
-    #     self.host = host
-    #     self.port = port
+        # def __init__(self, user="default",
+        #                  password="redispw",
+        #                  host="172.18.0.3",#"localhost",
+        #                  port="49153"
+        #                  ):
+        #     self.connection = None
+        #     self.user = user
+        #     self.password = password
+        #     self.host = host
+        #     self.port = port
         print(f'Redis host = {self.host}, port = {self.port}')
 
     def __del__(self):
@@ -56,8 +57,7 @@ class CacheSupport:
         self.connection.set(params['id_user'], json.dumps(obj_posts, default=str))
 
     def register_lua_func(self):
-        lua_code = """
-        #!lua name=hashmod
+        lua_code = """#!lua name=hashmod
 
         redis.register_function('store_string_with_hash', function(keys, args)
             local num1 = tonumber(args[1])
@@ -87,7 +87,7 @@ class CacheSupport:
             return key_hash
         end)
 
-        redis.register_function('get_string_by_hash', function(keys, args)
+        redis.register_function('get_string_by_users', function(keys, args)
             local num1 = tonumber(args[1])
             local num2 = tonumber(args[2])
             if not num1 or not num2 then
@@ -117,6 +117,26 @@ class CacheSupport:
             -- local value = redis.call("GET", key_hash)
             return value
         end)
+        
+        redis.register_function('get_string_by_hash', function(keys, args)
+            
+            local key_hash = tostring(args[1])
+            
+            ------------------------
+            local now = redis.call('TIME')
+            local seconds = tonumber(now[1])
+            local microseconds = tonumber(now[2])
+            local timestamp = seconds + microseconds / 1000000
+            
+            local window = 30*24*3600 -- 1 месяц 
+            
+            local start_ts = timestamp - window
+            ------------------------
+            
+            local value = redis.call('ZRANGEBYSCORE', key_hash, start_ts, timestamp, 'WITHSCORES')
+            -- local value = redis.call("GET", key_hash)
+            return value
+        end)
         """
         # try:
         #     self.connection.execute_command('FUNCTION', 'DELETE', 'hashmod')
@@ -124,7 +144,8 @@ class CacheSupport:
         #     pass
         try:
             # result = self.connection.execute_command('FUNCTION', 'LOAD', 'LUA', lua_code)
-            result = self.connection.register_script(lua_code)
+            result = self.connection.function_load(lua_code)
+            # result = self.connection.register_script(lua_code)
             print(f"Загружено на ноду {self.host}:{self.port}: {result}")
         except(Exception, redis.RedisError) as error:
             print(f"Не загружено на ноду {self.host}:{self.port} - {error} !!")
@@ -137,28 +158,30 @@ class CacheSupport:
             dialog_text = dialog_data['dialog_text']
 
             key_hash = self.connection.fcall('store_string_with_hash', 0, id_from_user, id_to_user, dialog_text)
-            self.connection.zadd(id_from_user, {key_hash:  datetime.datetime.now().timestamp()})
-            self.connection.zadd(id_to_user, {key_hash:  datetime.datetime.now().timestamp()})
+            res_id_form_user = self.connection.zadd(id_from_user, {key_hash: datetime.datetime.now().timestamp()})
+            res_id_to_user = self.connection.zadd(id_to_user, {key_hash: datetime.datetime.now().timestamp()})
             print("Сохранили под ключом:", key_hash)
+            return True
+        return False
 
     def get_dialog_users(self, **dialog_data):
         if self.connection is not None:
             id_from_user = dialog_data['from_user']
             id_to_user = dialog_data['to_user']
 
-            stored_value = self.connection.fcall('get_string_by_hash', 0, id_from_user, id_to_user)
+            stored_value = self.connection.fcall('get_string_by_users', 0, id_from_user, id_to_user)
             print("Получили из Redis:", stored_value)
 
     def get_dialogs_by_user_id(self, id_user):
         if self.connection is not None:
-            id_from_user = dialog_data['from_user']
-            id_to_user = dialog_data['to_user']
+            unow = datetime.datetime.now()
+            udelta = datetime.timedelta(days=30)
+            uold = unow - udelta
+            list_hash = self.connection.zrangebyscore(id_user, uold.timestamp(), unow.timestamp(), withscores=True)
 
-            stored_value = self.connection.fcall('get_string_by_hash', 0, id_from_user, id_to_user)
-            print("Получили из Redis:", stored_value)
+            list_dialogs = []
+            for ihash in list_hash:
+                stored_value = self.connection.fcall('get_string_by_hash', 0, ihash[0])
+                list_dialogs.append(stored_value)
 
-
-
-
-
-
+            print("Получили из Redis:", list_dialogs)

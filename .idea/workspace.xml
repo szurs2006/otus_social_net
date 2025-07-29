@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ8 code release">
-      <change afterPath="$PROJECT_DIR$/HomeWork8/dialog_service/common_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/dialog_service/config_service.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/dialog_service/dialogs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/dialog_service/redis_support.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/dialog_service/routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/only_100_users.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HomeWork8/~$чет по ДЗ8.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HomeWork8/~WRL2564.tmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HomeWork8/Отчет по ДЗ8.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cache_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cache_support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -331,7 +323,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752748799233</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="ДЗ8 code release">
+      <option name="closed" value="true" />
+      <created>1753769664328</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1753769664328</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="UnknownFeatures">

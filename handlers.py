@@ -7,6 +7,7 @@ from common import cache
 from common import invalidate_cache
 from rabbitmq_support import RabbitMQService
 from typing import Dict
+import requests
 
 # --- Константы ---
 RABBITMQ_URL = "amqp://guest:guest@localhost/"
@@ -265,6 +266,63 @@ def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
 
     # print(res_data)
     return Response(content=json.dumps(user_dict), media_type="application/json")
+
+
+@router.post('/v2/dialog/send')
+async def send_dialog(request: Request, response: Response):
+
+    response.headers['content-type'] = 'application/json'
+
+    body = await request.body()
+
+    obj_post = json.loads(body)
+
+    from_user = obj_post["from_user"]
+    to_user = obj_post["to_user"]
+    dialog_text = obj_post["dialog_text"]
+
+    print(f'from_user = {from_user}, to_user = {to_user}, dialog_text = {dialog_text}')
+
+    try:
+        response = requests.post(url='http://localhost:8071/dialog/send', json=obj_post)
+
+        if response.status_code == 200:
+            print("POST request successful!")
+            print("Response JSON:", response.text)
+
+        else:
+            print(f"POST request failed with status code: {response.status_code}")
+            print("Response text:", response.text)
+        res_data = response.text
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при отправке запроса к Dialog Service: {e}")
+        res_data = 'You cannot add new dialog!!'
+
+    return Response(res_data)
+
+
+@router.get("/v2/dialog/list/{id_user}")
+def get_dialogs_by_id_user(id_user: str, request: Request, response: Response):
+    res_obj = {
+        'id_user': id_user,
+        'res_text': "No data for user!"
+    }
+    try:
+        urls = 'http://localhost:8071/dialog/list/'+id_user
+        response = requests.get(url=urls)
+
+        if response.status_code == 200:
+            print("POST request successful!")
+            print("Response JSON:", response.text)
+        else:
+            print(f"POST request failed with status code: {response.status_code}")
+            print("Response text:", response.text)
+        res_obj = json.loads(response.text)
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при отправке запроса к Dialog Service: {e}")
+        res_obj = {'Error': 'You cannot get any dialogs!!'}
+
+    return Response(content=json.dumps(res_obj), media_type="application/json")
 
 
 clients: Dict[WebSocket, str] = {}

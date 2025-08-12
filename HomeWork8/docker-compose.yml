@@ -1,36 +1,19 @@
-services:                           
-  postgres_db:                      
-    image: postgres:16.4          
-    restart: always                 
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "pass"
-      PGUSER: "postgres"
-      PGPASSWORD: "pass"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+version: "3.9"
+services:
+  grpc-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.grpc
+    container_name: grpc-service
     ports:
-    - '54321:5432'
-    volumes:
-      - db-vol:/var/lib/postgresql/data
-  redis_db:
-    image: redis:latest
-    restart: always
-    environment:         
-     - REDIS_PORT=49153            
-     - REDIS_USER=default
-     - REDIS_PASSWORD=redispw
+      - "50051:50051"
+
+  fastapi-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: fastapi-app
     ports:
-     - '49153:6379'
-#  socialnet:
-##    image: socialnet:v7
-#    build: ..
-#    depends_on:
-#      postgres_db:
-#        condition: service_started
-#      redis_db:
-#        condition: service_started
-#    restart: always
-#    ports:
-#     - '8075:8070'
-volumes:                           
-  db-vol:
+      - "8000:8000"
+    depends_on:
+      - grpc-service

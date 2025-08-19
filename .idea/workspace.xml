@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ8 code release">
-      <change afterPath="$PROJECT_DIR$/HomeWork8/~$чет по ДЗ8.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/~WRL2564.tmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork8/Отчет по ДЗ8.docx" afterDir="false" />
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ9 отчет">
+      <change afterPath="$PROJECT_DIR$/HomeWork10/~$чет по ДЗ10.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HomeWork9/~$чет по ДЗ9.docx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +19,13 @@
       <list>
         <option value="Python Script" />
       </list>
+    </option>
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="OPTIONS">
+      <set>
+        <option value="REBASE" />
+      </set>
     </option>
   </component>
   <component name="Git.Settings">
@@ -38,9 +44,6 @@
     &quot;accountId&quot;: &quot;da440502-8953-48de-95d8-2ad195f2d347&quot;
   }
 }</component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -52,48 +55,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.dialogs.executor": "Debug",
-    "Python.handlers.executor": "Debug",
-    "Python.main.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/PyProjects/otus_social_net/HomeWork8",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.handlers.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/PyProjects/SocialNet/SocialNet/HomeWork7&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\PyProjects\otus_social_net\HomeWork8" />
       <recent name="D:\PyProjects\SocialNet\SocialNet\HomeWork7" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PyProjects\SocialNet\SocialNet" />
+      <recent name="D:\PyProjects\SocialNet\SocialNet\HomeWork5" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="dialogs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="SocialNet" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/HomeWork8/dialog_service" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/HomeWork8/dialog_service/dialogs.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SocialNet" />
       <option name="ENV_FILES" value="" />
@@ -119,14 +99,13 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.dialogs" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-c69650fc56ca-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15619.17" />
+        <option value="bundled-python-sdk-975db3bf15a3-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.18034.82" />
       </set>
     </attachedChunks>
   </component>
@@ -323,19 +302,24 @@
       <option name="project" value="LOCAL" />
       <updated>1752748799233</updated>
     </task>
-    <task id="LOCAL-00024" summary="ДЗ8 code release">
+    <task id="LOCAL-00024" summary="ДЗ7 отчет">
       <option name="closed" value="true" />
-      <created>1753769664328</created>
+      <created>1752754421568</created>
       <option name="number" value="00024" />
       <option name="presentableId" value="LOCAL-00024" />
       <option name="project" value="LOCAL" />
-      <updated>1753769664328</updated>
+      <updated>1752754421568</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="ДЗ9 отчет">
+      <option name="closed" value="true" />
+      <created>1755000764320</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1755000764320</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
-  </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="docker-compose.yml" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -373,8 +357,9 @@
     <MESSAGE value="ДЗ7 added zadd" />
     <MESSAGE value="ДЗ7 the first result" />
     <MESSAGE value="ДЗ7 the next result" />
-    <MESSAGE value="ДЗ8 code release" />
-    <option name="LAST_COMMIT_MESSAGE" value="ДЗ8 code release" />
+    <MESSAGE value="ДЗ7 отчет" />
+    <MESSAGE value="ДЗ9 отчет" />
+    <option name="LAST_COMMIT_MESSAGE" value="ДЗ9 отчет" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

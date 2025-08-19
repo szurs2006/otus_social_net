@@ -1,6 +1,7 @@
 import redis
 import json
 import datetime
+import uuid
 
 
 class CacheSupport:
@@ -120,18 +121,41 @@ class CacheSupport:
             print(f"Не загружено на ноду {self.host}:{self.port} - {error} !!")
             # print(f"Не загружено на ноду {self.host}:{self.port} - {redis.exceptions.ResponseError} !!")
 
-    def add_dialog_text(self, **dialog_data):
-        if self.connection is not None:
-            id_from_user = dialog_data['from_user']
-            id_to_user = dialog_data['to_user']
-            dialog_text = dialog_data['dialog_text']
-
-            key_hash = self.connection.fcall('store_string_with_hash', 0, id_from_user, id_to_user, dialog_text)
-            res_id_form_user = self.connection.zadd(id_from_user, {key_hash: datetime.datetime.now().timestamp()})
-            res_id_to_user = self.connection.zadd(id_to_user, {key_hash: datetime.datetime.now().timestamp()})
-            print("Сохранили под ключом:", key_hash)
-            return True
-        return False
+    # def add_dialog_text(self, **dialog_data):
+    #     message_id = str(uuid.uuid4())
+    #
+    #     try:
+    #         with postgre.cursor() as cursor:
+    #             cursor.execute("""
+    #                         INSERT INTO messages (id, sender_id, recipient_id, content)
+    #                         VALUES (%s, %s, %s, %s)
+    #                     """, (message_id, sender_id, recipient_id, content))
+    #
+    #             # Публикуем событие в рамках транзакции
+    #             self._publish_event('message_created', {
+    #                 'message_id': message_id,
+    #                 'sender_id': sender_id,
+    #                 'recipient_id': recipient_id
+    #             })
+    #
+    #             self.db_conn.commit()
+    #
+    #         return message_id
+    #     except Exception as e:
+    #         self.db_conn.rollback()
+    #         raise e
+    #
+    #     if self.connection is not None:
+    #         id_from_user = dialog_data['from_user']
+    #         id_to_user = dialog_data['to_user']
+    #         dialog_text = dialog_data['dialog_text']
+    #
+    #         key_hash = self.connection.fcall('store_string_with_hash', 0, id_from_user, id_to_user, dialog_text)
+    #         res_id_form_user = self.connection.zadd(id_from_user, {key_hash: datetime.datetime.now().timestamp()})
+    #         res_id_to_user = self.connection.zadd(id_to_user, {key_hash: datetime.datetime.now().timestamp()})
+    #         print("Сохранили под ключом:", key_hash)
+    #         return True
+    #     return False
 
     def get_dialogs_by_user_id(self, id_user):
         if self.connection is not None:

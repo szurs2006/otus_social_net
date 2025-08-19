@@ -1,5 +1,6 @@
 from cache_support import CacheSupport
 from postgre_support import PostgreSupport
+from outbox import TransactionalOutbox
 
 import time
 import configparser
@@ -20,6 +21,8 @@ postgre = PostgreSupport(user=config["DB_MASTER"]["USERNAME"],
                          host=config["DB_MASTER"]["IP_ADDRESS"],
                          port=config["DB_MASTER"]["PORT"],
                          database=config["DB_MASTER"]["DATABASE_NAME"])
+
+
 
 postgre_repl1 = PostgreSupport(user=config["DB_REPLICA_1"]["USERNAME"],
                                password=config["DB_REPLICA_1"]["PASSWORD"],

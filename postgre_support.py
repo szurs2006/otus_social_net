@@ -1,5 +1,8 @@
 import psycopg2
 import hashlib
+from outbox import TransactionalOutbox
+
+
 
 
 def get_first(seq):
@@ -32,6 +35,8 @@ class PostgreSupport:
         self.host = connp['host']
         self.port = connp['port']
         self.database = connp['database']
+        self.outbox = None
+
         print(f'Postgres host = {self.host}, port = {self.port}')
 
     def __del__(self):
@@ -47,6 +52,7 @@ class PostgreSupport:
                                                port=self.port,
                                                dbname=self.database
                                                )
+            self.outbox = TransactionalOutbox()
             print("Соединение с PostgreSQL открыто")
             return True
         except(Exception, psycopg2.Error) as error:
@@ -273,11 +279,25 @@ class PostgreSupport:
             hash_object = hashlib.md5()
             hash_object.update(str_for_hash)
             hex_digest = hash_object.hexdigest()
+
             cursor = self.connection.cursor()
             try:
                 cursor.execute(
-                    'INSERT INTO dialogs (from_user, to_user, dtext, dist_key) VALUES (%s, %s, %s, %s)',
+                    'INSERT INTO dialogs (from_user, to_user, dtext, dist_key) VALUES (%s, %s, %s, %s) returning created_at',
                     (id_from_user, id_to_user, dialog_text, hex_digest))
+                (message_created_at,) = cursor.fetchone()
+                mesint_created_at = message_created_at.timestamp()
+                self.outbox.add_event(
+                    cursor,
+                    event_type="message_created",
+                    aggregate_id=str(id_to_user),
+                    payload={
+                        "message_created_at": mesint_created_at,
+                        "id_from_user": id_from_user,
+                        "id_to_user": id_to_user,
+                        "delta": +1
+                    }
+                )
                 self.connection.commit()
                 return True
             except (Exception, psycopg2.Error) as error2:
@@ -287,18 +307,48 @@ class PostgreSupport:
                 cursor.close()
             return False
 
+    def mark_message_read(self, message_id: int, id_to_user: int):
+        cursor = self.connection.cursor()
+        try:
+            self.outbox.add_event(
+                cursor,
+                event_type="message_read",
+                aggregate_id=str(id_to_user),
+                payload={
+                    "message_id": message_id,
+                    "id_to_user": id_to_user,
+                    "delta": -1
+                }
+            )
+            self.connection.commit()
+        except Exception:
+            self.connection.rollback()
+            raise
+        finally:
+            cursor.close()
+
     def get_dialogs_by_user_id(self, id_user):
         if self.connection is not None:
             cursor = self.connection.cursor()
-            select_query = "SELECT * FROM dialogs WHERE from_user = %s OR to_user = %s ORDER BY created_at"
-            cond_for_select = (id_user, id_user)
+            # select_query = "SELECT * FROM dialogs WHERE from_user = %s OR to_user = %s ORDER BY created_at"
+            # cond_for_select = (id_user, id_user)
+
+            # select_query = "SELECT * FROM dialogs ORDER BY created_at"
+
+
+            select_query = "SELECT * FROM dialogs WHERE to_user = %s ORDER BY created_at"
+            cond_for_select = (id_user,)
             try:
                 cursor.execute(select_query, cond_for_select)
+                # cursor.execute(select_query)
                 user_dialogs = cursor.fetchall()
                 list_dialogs = []
                 for dialog in user_dialogs:
-                    dstr = f'from_user = {dialog[0]}, to_user = {dialog[1]}, text = {dialog[2]}'
+                    dstr = f'from_user = {dialog[0]}, to_user = {dialog[1]}, text = {dialog[2]}, created_at = {dialog[4]}'
                     print(dstr)
+                    message_created_at = dialog[4]
+                    mesint_created_at = message_created_at.timestamp()
+                    self.mark_message_read(mesint_created_at, id_user)
                     list_dialogs.append(dstr)
 
                 return list_dialogs

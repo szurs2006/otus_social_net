@@ -2,19 +2,6 @@ import json
 import psycopg2
 from datetime import datetime, timezone
 
-# class Postgres:
-#     def __init__(self, dsn: str):
-#         self.dsn = dsn
-#
-#     def begin(self):
-#         """
-#         Открывает новое соединение и транзакцию.
-#         Возвращает (conn, cur). Нужно руками commit/rollback/close.
-#         """
-#         conn = psycopg2.connect(self.dsn)
-#         cur = conn.cursor()
-#         return conn, cur
-
 
 class TransactionalOutbox:
     def __init__(self):

@@ -2,13 +2,27 @@
 -- PostgreSQL database cluster dump
 --
 
--- Started on 2025-08-19 15:01:20
+-- Started on 2025-08-20 11:15:00
 
 SET default_transaction_read_only = off;
 
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 
+--
+-- Roles
+--
+
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:VrKjDjT0Hxp3AKtQzc3pwA==$vsuQyZc0t4RGuCrpxSl9aJkoqRESMF1I1XHJofZcCGM=:E2nM9RQDXS7focbLsmL7iweRZFR+j43bB6KkKnaGWZ4=';
+
+--
+-- User Configurations
+--
+
+--
+-- Databases
+--
 
 --
 -- PostgreSQL database dump
@@ -17,7 +31,7 @@ SET standard_conforming_strings = on;
 -- Dumped from database version 16.4 (Debian 16.4-1.pgdg120+2)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-08-19 15:01:21
+-- Started on 2025-08-20 11:15:01
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,7 +44,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Completed on 2025-08-19 15:01:21
+-- Completed on 2025-08-20 11:15:01
 
 --
 -- PostgreSQL database dump complete
@@ -47,7 +61,7 @@ SET row_security = off;
 -- Dumped from database version 16.4 (Debian 16.4-1.pgdg120+2)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-08-19 15:01:21
+-- Started on 2025-08-20 11:15:01
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -69,7 +83,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- TOC entry 3410 (class 0 OID 0)
+-- TOC entry 3411 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
 --
@@ -91,7 +105,8 @@ CREATE TABLE public.dialogs (
     to_user bigint NOT NULL,
     dtext character varying,
     dist_key text,
-    created_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    is_read boolean DEFAULT false NOT NULL
 );
 
 
@@ -128,7 +143,7 @@ CREATE SEQUENCE public.logins_id_seq
 ALTER SEQUENCE public.logins_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3411 (class 0 OID 0)
+-- TOC entry 3412 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: logins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -201,7 +216,7 @@ CREATE SEQUENCE public.users_friends_id_seq
 ALTER SEQUENCE public.users_friends_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3412 (class 0 OID 0)
+-- TOC entry 3413 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: users_friends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -225,7 +240,7 @@ CREATE SEQUENCE public.users_id_seq
 ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3413 (class 0 OID 0)
+-- TOC entry 3414 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -264,7 +279,7 @@ CREATE SEQUENCE public.users_posts_id_seq
 ALTER SEQUENCE public.users_posts_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3414 (class 0 OID 0)
+-- TOC entry 3415 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: users_posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -273,7 +288,7 @@ ALTER SEQUENCE public.users_posts_id_seq OWNED BY public.users_posts.id;
 
 
 --
--- TOC entry 3238 (class 2604 OID 16417)
+-- TOC entry 3239 (class 2604 OID 16417)
 -- Name: logins id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -281,7 +296,7 @@ ALTER TABLE ONLY public.logins ALTER COLUMN id SET DEFAULT nextval('public.login
 
 
 --
--- TOC entry 3239 (class 2604 OID 16418)
+-- TOC entry 3240 (class 2604 OID 16418)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -289,7 +304,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 3240 (class 2604 OID 16419)
+-- TOC entry 3241 (class 2604 OID 16419)
 -- Name: users_friends id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -297,7 +312,7 @@ ALTER TABLE ONLY public.users_friends ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 3241 (class 2604 OID 16420)
+-- TOC entry 3242 (class 2604 OID 16420)
 -- Name: users_posts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -305,56 +320,64 @@ ALTER TABLE ONLY public.users_posts ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3395 (class 0 OID 16388)
+-- TOC entry 3396 (class 0 OID 16388)
 -- Dependencies: 216
 -- Data for Name: dialogs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.dialogs VALUES (5, 6, 'Что-то я тебя не помню', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:00:55.977348+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Ты меня с кем-то путаешь, я таким в школе не занимался', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:07:13.582465+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Я был примерным пай-мальчиком', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:08:15.169046+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Учился на отлично', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:08:34.620755+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Дак это был ты, понятно', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:19:26.117467+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Нам надо встеретиться и поговорить', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:19:57.085356+00');
-INSERT INTO public.dialogs VALUES (5, 6, 'Не, ругаться не буду, просто встретиться, вспомнить прошлое', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:21:57.298603+00');
-INSERT INTO public.dialogs VALUES (3, 6, 'Да, привет, почему у вокзала?', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 09:54:00.739937+00');
-INSERT INTO public.dialogs VALUES (3, 6, 'Ага, ок, понял!', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 09:57:13.821511+00');
-INSERT INTO public.dialogs VALUES (1, 6, 'МММ. сегодня не могу!', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:10:51.159877+00');
-INSERT INTO public.dialogs VALUES (1, 6, 'Много дел!', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:11:03.64365+00');
-INSERT INTO public.dialogs VALUES (1, 6, 'М.б. завтра', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:11:17.983038+00');
-INSERT INTO public.dialogs VALUES (3, 6, 'Приду, если получится..', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 10:15:18.977368+00');
-INSERT INTO public.dialogs VALUES (3, 6, 'Также у вокзала?', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 10:15:32.879864+00');
-INSERT INTO public.dialogs VALUES (6, 2, 'Сегодня, как и вчера, встречаемся у вокзала', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:06:32.170937+00');
-INSERT INTO public.dialogs VALUES (6, 2, 'Придет третий!', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:06:51.210103+00');
-INSERT INTO public.dialogs VALUES (6, 2, 'Думаю, да', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:07:50.552095+00');
-INSERT INTO public.dialogs VALUES (6, 1, 'Сегодня приходи к вокзалу!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:09:51.059757+00');
-INSERT INTO public.dialogs VALUES (6, 1, 'Будут второй и третий!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:10:09.541467+00');
-INSERT INTO public.dialogs VALUES (6, 1, 'Они подтвердили!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:10:27.110814+00');
-INSERT INTO public.dialogs VALUES (6, 1, 'Да, конечно, и завтра тоже встречаемся', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:12:26.491863+00');
-INSERT INTO public.dialogs VALUES (6, 2, 'Завтра тоже встречаемся, не удивляйся!!', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:13:57.794873+00');
-INSERT INTO public.dialogs VALUES (6, 3, 'Привет, сегодня встречаемся у вокзала!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:53:28.123878+00');
-INSERT INTO public.dialogs VALUES (6, 3, 'Потому что мне так ближе от работы', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:54:38.707594+00');
-INSERT INTO public.dialogs VALUES (6, 3, 'Договорились..', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:57:33.38257+00');
-INSERT INTO public.dialogs VALUES (6, 3, 'И завтра тоже встречаемся!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 10:14:49.388513+00');
-INSERT INTO public.dialogs VALUES (6, 3, 'Да!!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 10:15:46.814895+00');
-INSERT INTO public.dialogs VALUES (2, 5, 'Созрели вишни в саду у тети Моти!', 'b7f1428b233718e0acaef609d317bad3', '2025-05-23 09:55:59.781031+00');
-INSERT INTO public.dialogs VALUES (2, 6, 'Как интересно, я его знаю?!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:07:24.229984+00');
-INSERT INTO public.dialogs VALUES (2, 6, 'Очень хорошо!!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:08:44.409665+00');
-INSERT INTO public.dialogs VALUES (2, 6, 'Хорошо!!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:14:17.724838+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Привет, я тебя знаю!!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 08:59:03.712688+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Похоже, мы вместе в школе учились.. ', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:00:09.915951+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Да как это? Ты не помнишь как мы в хим. подвал зазили?!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:05:27.288169+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'ДИ потом делали дымовухи', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:06:21.490328+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'ААА, так ты это отличник-зануда с первой парты', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:17:29.691089+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Я тебе еще краской учебники залил', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:18:15.350415+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Ты еще долго не мог найти того, кто это сделал', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:18:42.395223+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Ругаться будешь? может не надо', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:20:42.407111+00');
-INSERT INTO public.dialogs VALUES (6, 5, 'Тогда давай, я за!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:22:36.119817+00');
-INSERT INTO public.dialogs VALUES (10, 11, 'Привет, как дела?', '92f79736ce4676b9d41f8e962f12755e', '2025-08-19 07:36:32.547134+00');
+INSERT INTO public.dialogs VALUES (5, 6, 'Что-то я тебя не помню', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:00:55.977348+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Ты меня с кем-то путаешь, я таким в школе не занимался', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:07:13.582465+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Я был примерным пай-мальчиком', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:08:15.169046+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Учился на отлично', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:08:34.620755+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Дак это был ты, понятно', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:19:26.117467+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Нам надо встеретиться и поговорить', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:19:57.085356+00', false);
+INSERT INTO public.dialogs VALUES (5, 6, 'Не, ругаться не буду, просто встретиться, вспомнить прошлое', 'b42686315da93b1d3f8c85a005244288', '2025-05-26 09:21:57.298603+00', false);
+INSERT INTO public.dialogs VALUES (3, 6, 'Да, привет, почему у вокзала?', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 09:54:00.739937+00', false);
+INSERT INTO public.dialogs VALUES (3, 6, 'Ага, ок, понял!', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 09:57:13.821511+00', false);
+INSERT INTO public.dialogs VALUES (1, 6, 'МММ. сегодня не могу!', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:10:51.159877+00', false);
+INSERT INTO public.dialogs VALUES (1, 6, 'Много дел!', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:11:03.64365+00', false);
+INSERT INTO public.dialogs VALUES (1, 6, 'М.б. завтра', '291dd475d0224126a68550d7c406f3b1', '2025-05-23 10:11:17.983038+00', false);
+INSERT INTO public.dialogs VALUES (3, 6, 'Приду, если получится..', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 10:15:18.977368+00', false);
+INSERT INTO public.dialogs VALUES (3, 6, 'Также у вокзала?', 'a1c5285851b5bbc79f967d85ff84f3a4', '2025-05-23 10:15:32.879864+00', false);
+INSERT INTO public.dialogs VALUES (6, 2, 'Сегодня, как и вчера, встречаемся у вокзала', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:06:32.170937+00', false);
+INSERT INTO public.dialogs VALUES (6, 2, 'Придет третий!', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:06:51.210103+00', false);
+INSERT INTO public.dialogs VALUES (6, 2, 'Думаю, да', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:07:50.552095+00', false);
+INSERT INTO public.dialogs VALUES (6, 1, 'Сегодня приходи к вокзалу!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:09:51.059757+00', false);
+INSERT INTO public.dialogs VALUES (6, 1, 'Будут второй и третий!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:10:09.541467+00', false);
+INSERT INTO public.dialogs VALUES (6, 1, 'Они подтвердили!', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:10:27.110814+00', false);
+INSERT INTO public.dialogs VALUES (6, 1, 'Да, конечно, и завтра тоже встречаемся', 'acdd163a762f841c6f8687b87dbb9592', '2025-05-23 10:12:26.491863+00', false);
+INSERT INTO public.dialogs VALUES (6, 2, 'Завтра тоже встречаемся, не удивляйся!!', '28efd832ac6f3fa5632f9776f5b3a637', '2025-05-23 10:13:57.794873+00', false);
+INSERT INTO public.dialogs VALUES (6, 3, 'Привет, сегодня встречаемся у вокзала!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:53:28.123878+00', false);
+INSERT INTO public.dialogs VALUES (6, 3, 'Потому что мне так ближе от работы', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:54:38.707594+00', false);
+INSERT INTO public.dialogs VALUES (6, 3, 'Договорились..', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 09:57:33.38257+00', false);
+INSERT INTO public.dialogs VALUES (6, 3, 'И завтра тоже встречаемся!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 10:14:49.388513+00', false);
+INSERT INTO public.dialogs VALUES (6, 3, 'Да!!', '3f05f60140d703c4956d9392cc6b5947', '2025-05-23 10:15:46.814895+00', false);
+INSERT INTO public.dialogs VALUES (2, 5, 'Созрели вишни в саду у тети Моти!', 'b7f1428b233718e0acaef609d317bad3', '2025-05-23 09:55:59.781031+00', false);
+INSERT INTO public.dialogs VALUES (2, 6, 'Как интересно, я его знаю?!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:07:24.229984+00', false);
+INSERT INTO public.dialogs VALUES (2, 6, 'Очень хорошо!!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:08:44.409665+00', false);
+INSERT INTO public.dialogs VALUES (2, 6, 'Хорошо!!', 'd4671aff849ceb62af5e9417f9db61d2', '2025-05-23 10:14:17.724838+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Привет, я тебя знаю!!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 08:59:03.712688+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Похоже, мы вместе в школе учились.. ', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:00:09.915951+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Да как это? Ты не помнишь как мы в хим. подвал зазили?!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:05:27.288169+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'ДИ потом делали дымовухи', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:06:21.490328+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'ААА, так ты это отличник-зануда с первой парты', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:17:29.691089+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Я тебе еще краской учебники залил', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:18:15.350415+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Ты еще долго не мог найти того, кто это сделал', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:18:42.395223+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Ругаться будешь? может не надо', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:20:42.407111+00', false);
+INSERT INTO public.dialogs VALUES (6, 5, 'Тогда давай, я за!', '57db4522f377eb0ba1c820ee53e6a0cd', '2025-05-26 09:22:36.119817+00', false);
+INSERT INTO public.dialogs VALUES (10, 11, 'Привет, как дела?', '92f79736ce4676b9d41f8e962f12755e', '2025-08-19 07:36:32.547134+00', false);
+INSERT INTO public.dialogs VALUES (11, 10, 'Дела идут - контора пишет', '71c32f6f259b896441a06ae591f8d340', '2025-08-19 10:56:34.210356+00', true);
+INSERT INTO public.dialogs VALUES (11, 10, 'Но куда идут- не знаю...', '71c32f6f259b896441a06ae591f8d340', '2025-08-19 11:18:56.070325+00', true);
+INSERT INTO public.dialogs VALUES (11, 10, 'Но да', '71c32f6f259b896441a06ae591f8d340', '2025-08-19 11:44:16.842062+00', true);
+INSERT INTO public.dialogs VALUES (11, 10, 'Но да да да', '71c32f6f259b896441a06ae591f8d340', '2025-08-19 11:53:09.490359+00', true);
+INSERT INTO public.dialogs VALUES (11, 12, 'From 11 to 12', '8f3126127eb89d00ac18990f07433553', '2025-08-20 06:05:01.829648+00', true);
+INSERT INTO public.dialogs VALUES (11, 12, 'Еще раз 11 to 12', '8f3126127eb89d00ac18990f07433553', '2025-08-20 06:08:14.164555+00', true);
+INSERT INTO public.dialogs VALUES (11, 12, 'Еще много много раз', '8f3126127eb89d00ac18990f07433553', '2025-08-20 06:09:06.745128+00', true);
+INSERT INTO public.dialogs VALUES (11, 13, 'Еще много------много раз', 'cb99a384034bdc6babf1ffb315970e5a', '2025-08-20 06:10:32.212137+00', true);
 
 
 --
--- TOC entry 3396 (class 0 OID 16394)
+-- TOC entry 3397 (class 0 OID 16394)
 -- Dependencies: 217
 -- Data for Name: logins; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -365,15 +388,24 @@ INSERT INTO public.logins VALUES (3, 6, 'pup', 'd1377c0281728bb8c20f8df217a7e094
 
 
 --
--- TOC entry 3404 (class 0 OID 16444)
+-- TOC entry 3405 (class 0 OID 16444)
 -- Dependencies: 225
 -- Data for Name: outbox; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.outbox VALUES ('2ee5002f-6574-4d5f-84ec-32b1aaaac201', 'message_read', '10', '{"delta": -1, "id_to_user": "10", "message_id": 1755600994.210356}', '2025-08-20 05:20:25.703175+00', '2025-08-20 06:05:58.934303+00');
+INSERT INTO public.outbox VALUES ('a6d121bd-b82e-496e-92ec-6974b27f60fe', 'message_created', '12', '{"delta": 1, "id_to_user": "12", "id_from_user": "11", "message_created_at": 1755669901.829648}', '2025-08-20 06:05:01.829648+00', '2025-08-20 06:06:35.273252+00');
+INSERT INTO public.outbox VALUES ('40e311bf-b0f3-4bc4-9b5b-e6d0b7560682', 'message_created', '12', '{"delta": 1, "id_to_user": "12", "id_from_user": "11", "message_created_at": 1755670094.164555}', '2025-08-20 06:08:14.164555+00', '2025-08-20 06:08:14.265524+00');
+INSERT INTO public.outbox VALUES ('09cee963-3d79-4b2f-8720-297bfc633a5e', 'message_created', '12', '{"delta": 1, "id_to_user": "12", "id_from_user": "11", "message_created_at": 1755670146.745128}', '2025-08-20 06:09:06.745128+00', '2025-08-20 06:09:07.006279+00');
+INSERT INTO public.outbox VALUES ('a4077b31-3afc-41f7-b293-468416625d5a', 'message_read', '12', '{"delta": -1, "id_to_user": "12", "message_id": 1755669901.829648}', '2025-08-20 06:09:24.707336+00', '2025-08-20 06:09:32.054791+00');
+INSERT INTO public.outbox VALUES ('02086f91-2d69-4ae0-842e-bd2f12864054', 'message_read', '12', '{"delta": -1, "id_to_user": "12", "message_id": 1755670094.164555}', '2025-08-20 06:09:31.882324+00', '2025-08-20 06:09:32.056358+00');
+INSERT INTO public.outbox VALUES ('8752819e-c991-4fff-a582-615e59279b12', 'message_read', '12', '{"delta": -1, "id_to_user": "12", "message_id": 1755670146.745128}', '2025-08-20 06:09:31.891061+00', '2025-08-20 06:09:32.057419+00');
+INSERT INTO public.outbox VALUES ('88f2de16-9ac2-487a-9bb4-41d86bfaa1a9', 'message_created', '13', '{"delta": 1, "id_to_user": "13", "id_from_user": "11", "message_created_at": 1755670232.212137}', '2025-08-20 06:10:32.212137+00', '2025-08-20 06:10:32.437907+00');
+INSERT INTO public.outbox VALUES ('c3496fcf-9f06-454e-a140-88d7a481d262', 'message_read', '13', '{"delta": -1, "id_to_user": "13", "message_id": 1755670232.212137}', '2025-08-20 06:10:47.443437+00', '2025-08-20 06:10:47.462513+00');
 
 
 --
--- TOC entry 3398 (class 0 OID 16400)
+-- TOC entry 3399 (class 0 OID 16400)
 -- Dependencies: 219
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -481,7 +513,7 @@ INSERT INTO public.users VALUES (100, 'Дмитрий', 'Абрамов', '2002-
 
 
 --
--- TOC entry 3399 (class 0 OID 16405)
+-- TOC entry 3400 (class 0 OID 16405)
 -- Dependencies: 220
 -- Data for Name: users_friends; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -489,7 +521,7 @@ INSERT INTO public.users VALUES (100, 'Дмитрий', 'Абрамов', '2002-
 
 
 --
--- TOC entry 3402 (class 0 OID 16410)
+-- TOC entry 3403 (class 0 OID 16410)
 -- Dependencies: 223
 -- Data for Name: users_posts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -497,7 +529,7 @@ INSERT INTO public.users VALUES (100, 'Дмитрий', 'Абрамов', '2002-
 
 
 --
--- TOC entry 3415 (class 0 OID 0)
+-- TOC entry 3416 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: logins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -506,7 +538,7 @@ SELECT pg_catalog.setval('public.logins_id_seq', 1, false);
 
 
 --
--- TOC entry 3416 (class 0 OID 0)
+-- TOC entry 3417 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: users_friends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -515,7 +547,7 @@ SELECT pg_catalog.setval('public.users_friends_id_seq', 1, false);
 
 
 --
--- TOC entry 3417 (class 0 OID 0)
+-- TOC entry 3418 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -524,7 +556,7 @@ SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
--- TOC entry 3418 (class 0 OID 0)
+-- TOC entry 3419 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: users_posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -533,7 +565,7 @@ SELECT pg_catalog.setval('public.users_posts_id_seq', 1, false);
 
 
 --
--- TOC entry 3248 (class 2606 OID 16452)
+-- TOC entry 3249 (class 2606 OID 16452)
 -- Name: outbox outbox_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -542,7 +574,7 @@ ALTER TABLE ONLY public.outbox
 
 
 --
--- TOC entry 3246 (class 2606 OID 16422)
+-- TOC entry 3247 (class 2606 OID 16422)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -551,7 +583,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 3249 (class 1259 OID 16453)
+-- TOC entry 3250 (class 1259 OID 16453)
 -- Name: outbox_unsent_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -559,7 +591,7 @@ CREATE INDEX outbox_unsent_idx ON public.outbox USING btree (sent_at) WHERE (sen
 
 
 --
--- TOC entry 3250 (class 2606 OID 16423)
+-- TOC entry 3251 (class 2606 OID 16423)
 -- Name: dialogs fk_from_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -568,7 +600,7 @@ ALTER TABLE ONLY public.dialogs
 
 
 --
--- TOC entry 3251 (class 2606 OID 16428)
+-- TOC entry 3252 (class 2606 OID 16428)
 -- Name: dialogs fk_to_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -576,13 +608,13 @@ ALTER TABLE ONLY public.dialogs
     ADD CONSTRAINT fk_to_user_user_id FOREIGN KEY (to_user) REFERENCES public.users(id) NOT VALID;
 
 
--- Completed on 2025-08-19 15:01:21
+-- Completed on 2025-08-20 11:15:01
 
 --
 -- PostgreSQL database dump complete
 --
 
--- Completed on 2025-08-19 15:01:21
+-- Completed on 2025-08-20 11:15:01
 
 --
 -- PostgreSQL database cluster dump complete

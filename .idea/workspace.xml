@@ -4,25 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ10 test">
-      <change afterPath="$PROJECT_DIR$/HomeWork10/dialogs.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork10/dialogs_outbox.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork10/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork10/pg_counters.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HomeWork6/~$чет по ДЗ6.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/counters_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/outbox.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/outbox_relay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SocialNet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SocialNet.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ee270321-d9d3-4ec8-8860-d0c49c09f2ac" name="Changes" comment="ДЗ10 test release">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HomeWork8/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HomeWork8/Отчет по ДЗ8.docx" beforeDir="false" afterPath="$PROJECT_DIR$/HomeWork8/Отчет по ДЗ8.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cache_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cache_support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/postgre_support.py" beforeDir="false" afterPath="$PROJECT_DIR$/postgre_support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +75,7 @@
       <recent name="D:\PyProjects\SocialNet\SocialNet\HomeWork5" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.counters_service">
+  <component name="RunManager" selected="Python.outbox_relay">
     <configuration name="counters_service" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SocialNet" />
       <option name="ENV_FILES" value="" />
@@ -160,8 +144,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.counters_service" />
         <item itemvalue="Python.outbox_relay" />
+        <item itemvalue="Python.counters_service" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -390,7 +374,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755574864344</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="ДЗ10 test release">
+      <option name="closed" value="true" />
+      <created>1755607971893</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1755607971893</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -406,7 +398,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="The second commit" />
     <MESSAGE value="it works" />
     <MESSAGE value="it works with hash" />
     <MESSAGE value="added get user by id" />
@@ -431,7 +422,8 @@
     <MESSAGE value="ДЗ7 отчет" />
     <MESSAGE value="ДЗ9 отчет" />
     <MESSAGE value="ДЗ10 test" />
-    <option name="LAST_COMMIT_MESSAGE" value="ДЗ10 test" />
+    <MESSAGE value="ДЗ10 test release" />
+    <option name="LAST_COMMIT_MESSAGE" value="ДЗ10 test release" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -440,26 +432,6 @@
           <url>file://$PROJECT_DIR$/main.py</url>
           <line>13</line>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/outbox_relay.py</url>
-          <line>66</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/postgre_support.py</url>
-          <line>312</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/counters_service.py</url>
-          <line>50</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/handlers.py</url>
-          <line>241</line>
-          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

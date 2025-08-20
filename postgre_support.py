@@ -1,6 +1,7 @@
 import psycopg2
 import hashlib
 from outbox import TransactionalOutbox
+from datetime import datetime
 
 
 
@@ -310,6 +311,14 @@ class PostgreSupport:
     def mark_message_read(self, message_id: int, id_to_user: int):
         cursor = self.connection.cursor()
         try:
+            dt = datetime.utcfromtimestamp(message_id)
+            cursor.execute(
+                'SELECT * FROM dialogs WHERE created_at = %s',
+                (dt,))
+            mes_data = cursor.fetchall()
+            cursor.execute(
+                'UPDATE dialogs SET is_read = true WHERE created_at = %s',
+                (dt,))
             self.outbox.add_event(
                 cursor,
                 event_type="message_read",
@@ -344,11 +353,12 @@ class PostgreSupport:
                 user_dialogs = cursor.fetchall()
                 list_dialogs = []
                 for dialog in user_dialogs:
-                    dstr = f'from_user = {dialog[0]}, to_user = {dialog[1]}, text = {dialog[2]}, created_at = {dialog[4]}'
+                    dstr = f'from_user = {dialog[0]}, to_user = {dialog[1]}, text = {dialog[2]}, created_at = {dialog[4]}, is_read = {dialog[5]}'
                     print(dstr)
                     message_created_at = dialog[4]
                     mesint_created_at = message_created_at.timestamp()
-                    self.mark_message_read(mesint_created_at, id_user)
+                    if dialog[5] is False:
+                        self.mark_message_read(mesint_created_at, id_user)
                     list_dialogs.append(dstr)
 
                 return list_dialogs

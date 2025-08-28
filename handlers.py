@@ -9,6 +9,7 @@ from rabbitmq_support import RabbitMQService
 from typing import Dict
 import requests
 
+
 # --- Константы ---
 RABBITMQ_URL = "amqp://guest:guest@localhost/"
 QUEUE_NAME = "my_queue"

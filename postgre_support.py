@@ -47,16 +47,18 @@ class PostgreSupport:
 
     def connect_db(self):
         try:
+            print(f"user={self.user}, password={self.password}, host={self.host}, port={self.port}, dbname={self.database}")
             self.connection = psycopg2.connect(user=self.user,
                                                password=self.password,
                                                host=self.host,
                                                port=self.port,
                                                dbname=self.database
                                                )
+
             self.outbox = TransactionalOutbox()
             print("Соединение с PostgreSQL открыто")
             return True
-        except(Exception, psycopg2.Error) as error:
+        except (Exception, psycopg2.Error) as error:
             print("Ошибка соединения с PostgreSQL:", error)
             return False
 
